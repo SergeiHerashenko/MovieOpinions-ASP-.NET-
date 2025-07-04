@@ -1,0 +1,27 @@
+@import './../../style/Variables.css';
+
+.button {
+    cursor: pointer;
+    box-shadow: var(--shadow-default);
+    border: var(--background-color) solid 1px;
+    background-color: rgb(49, 49, 49);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    font-family: var(--font-family-regular);
+}
+
+@media (hover: hover) {
+    .button:hover {
+        box-shadow: var(--shadow-hover);
+        color: #d6d6d6;
+        transition: 500ms;
+    }
+}
+
+@media (hover: none) {
+    .button:active {
+        box-shadow: var(--shadow-hover);
+        color: #d6d6d6;
+        transition: 500ms;
+    }
+}

@@ -1,0 +1,27 @@
+:root{
+    /* ==== Фон сайту ==== */
+    --bg-image: url(../assets/Image/Background_Image.png);
+    --bg-position: center center;
+    --bg-size: cover;
+    --margin-body: 20px 10px;
+    --border-color: #000;
+    --bg-overlay-color: rgba(51, 51, 51, 0.8);
+
+    /* ==== Хедер ==== */
+    --background-color: #333;
+
+    /* ==== Тіні ==== */
+    --shadow-default: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #444,
+                      inset -5px -5px 10px #222;
+    --shadow-hover: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222,
+                    inset -5px -5px 10px #444;
+
+    /* ==== Шрифти ==== */
+    --font-family-akronim: 'Akronim';
+    --font-family-italic: "Arsenal-Italic";
+    --font-family-regular: "Arsenal-Regular";
+
+    /* ==== Кольори ==== */
+    --accent-color: #FF8304;
+    --text-color: #ddd;
+}
