@@ -23,7 +23,7 @@ const NavLink = ({menuOpen}) => {
         const updateVisibleItems = () => {
             if(!conteinerRef.current || !measurenebtRef.current) return;
 
-            // 🛑 Не виконувати логіку на мобільних екранах
+            //  Не виконувати логіку на мобільних екранах
             if (window.innerWidth < 730) {
                 setVisibleCount(links.length); // Показати всі
                 return;
@@ -60,6 +60,12 @@ const NavLink = ({menuOpen}) => {
 
         const resizeObserver = new ResizeObserver(updateVisibleItems);
         resizeObserver.observe(conteinerRef.current); 
+
+        // Обов'язково видаляємо слухача при демонтажі компонента
+        return () => {
+            resizeObserver.disconnect();
+            window.removeEventListener('resize', updateVisibleItems);
+        };
     }, [links]);
 
     return (

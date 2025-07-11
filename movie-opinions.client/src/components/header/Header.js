@@ -1,9 +1,9 @@
-import NavLinks from './NavLinks.js'
+import NavLinks from '../header/NavLinks.js'
 import './Header.css';
 import '../../style/Variables.css';
 import '../../style/Globals.css';
 import Logo from "./Logo.js";
-import Button from '../button/Button.js';
+import Button from '../ui/button/Button.js';
 import loginIcon from '../../assets/Image/Login_icon.png';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

@@ -3,7 +3,7 @@
     --bg-image: url(../assets/Image/Background_Image.png);
     --bg-position: center center;
     --bg-size: cover;
-    --margin-body: 20px 10px;
+    --margin-body: 0 10px;
     --border-color: #000;
     --bg-overlay-color: rgba(51, 51, 51, 0.8);
 

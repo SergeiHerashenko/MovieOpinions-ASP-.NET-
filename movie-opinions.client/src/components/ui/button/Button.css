@@ -1,4 +1,4 @@
-@import './../../style/Variables.css';
+@import '../../../style/Variables.css';
 
 .button {
     cursor: pointer;

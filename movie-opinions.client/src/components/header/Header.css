@@ -10,7 +10,10 @@
     max-width: 1900px;
     width: 100%;
     box-sizing: border-box;
-    margin: auto;
+    margin: 20px auto;
+    position: sticky;
+    top: 20px;
+    z-index: 3;
 }
 
 .measurement-menu{
@@ -47,6 +50,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    z-index: 2;
 }
 
 .header__dropdown li {
@@ -207,6 +211,7 @@
         background: var(--background-color);
         padding: 20px 40px;
         box-shadow: var(--shadow-default);
+        z-index: 2;
     }
 
     .header__auth {
@@ -231,6 +236,7 @@
         background: var(--background-color);
         padding: 20px 40px;
         box-shadow: var(--shadow-default);
+        z-index: 2;
     }
 
     .header__img{
@@ -240,10 +246,6 @@
 
     .header__logo{
         font-size: 20px;
-    }
-
-    .header {
-        position: relative;
     }
 
     .header__logo-wrapper {

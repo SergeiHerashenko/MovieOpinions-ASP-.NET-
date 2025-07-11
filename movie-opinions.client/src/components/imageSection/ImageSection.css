@@ -1,0 +1,74 @@
+@import '../../style/Variables.css';
+
+.main {
+    position: relative;
+    padding: 2rem 2rem;
+    text-align: center;
+    color: var(--text-color);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column; /* або row, залежно від розміщення */
+    align-items: center;     /* по горизонталі */
+    justify-content: center; /* по вертикалі */
+}
+
+.main__images {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    perspective: 1000px;
+}
+
+
+.main__images__img {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-sizing: border-box; /* Задаємо box-sizing для врахування ширини границі та поля у визначенні розміру елемента / Set box-sizing to include border and padding width in element sizing */
+    height: 100%; /* Встановлюємо висоту блоку на 100% від висоти батьківського контейнера / Set the height of the block to 100% of the parent container height */
+    display: flex; /* Задаємо властивість flex для використання flex-контейнера /Set the flex property for using a flex container/ */
+    padding: 10px; /* Зовнішній відступ від тексту до рамки, 10px ширини вікна перегляду /External margin from text to the border, 10px of the viewport width/ */
+    flex-direction: column; /* Задаємо напрямок відображення дочірніх елементів у стовпчик /Set the direction of displaying child elements in a column/ */
+    justify-content: center; /* Вирівнюємо елементи по центру по вертикалі /Align elements to the center vertically/ */
+    align-items: center; /* Вирівнюємо елементи по центру по горизонталі /Align elements to the center horizontally/ */
+    align-self: stretch; /* Розтягує об'єкт на всю ширину контейнера /Stretch the object to the full width of the container/ */
+    border-radius: 20px; /* Радіус закруглення кутів, 20px /Corner radius, 20px/ */
+    border: 0.2vw solid rgba(51, 51, 51, 0.50); /* Тонка рамка, 0.2% ширини вікна перегляду /Thin border, 0.2% of the viewport width/ */
+    background: #333; /* Колір фону /Background color/ */
+    box-shadow: -1.2vw -1.2vw 2.4vw 0px #3E3E3E, 
+                1.2vw 1.2vw 2.4vw 0px #1E1E1E, 
+                -1.2vw -1.2vw 2.4vw 0px rgba(62, 62, 62, 0.25) inset, 
+                1.2vw 1.2vw 2.4vw 0px rgba(30, 30, 30, 0.25) inset; /* Тіні блоку / Block shadows */
+}
+
+.main__images__img:hover {
+    transform: scale(1.05) rotateY(0deg);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.6);
+}
+
+.img--rotate-left {
+    transform: rotate(-5deg);
+}
+
+.img--rotate-right {
+    transform: rotate(5deg);
+}
+
+.img--flip {
+    transform: rotate(-5deg);
+}
+
+.main__text p,
+.main__text h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: var(--font-family-regular);
+}
+
