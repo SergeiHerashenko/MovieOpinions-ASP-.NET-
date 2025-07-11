@@ -2,16 +2,15 @@ import './Header.css';
 import '../../style/Fonts.css';
 import { useLayoutEffect, useRef, useState } from 'react';
 
+const links = [
+    { id: 1, label: 'Головна' },
+    { id: 2, label: 'Фільми' },
+    { id: 3, label: 'Новинки' },
+    { id: 4, label: 'Залишити відгук' },
+    { id: 5, label: 'Контакти' }
+];
+
 const NavLink = ({menuOpen}) => {
-
-    const links = [
-        { id: 1, label: 'Головна' },
-        { id: 2, label: 'Фільми' },
-        { id: 3, label: 'Новинки' },
-        { id: 4, label: 'Залишити відгук' },
-        { id: 5, label: 'Контакти' }
-    ];
-
     const conteinerRef = useRef(null);
     const measurenebtRef = useRef(null);
     const itemRef = useRef([]);
@@ -66,7 +65,7 @@ const NavLink = ({menuOpen}) => {
             resizeObserver.disconnect();
             window.removeEventListener('resize', updateVisibleItems);
         };
-    }, [links]);
+    }, []);
 
     return (
         <>
