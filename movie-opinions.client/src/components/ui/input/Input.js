@@ -1,8 +1,14 @@
 import './Input.css';
 
-const Input = ({name}) => {
+const Input = ({ id, name, type, required}) => {
     return(
-        <input name={name} className='input' />
+        <input 
+            id={id}
+            className='input'
+            name={name}
+            type={type}
+            required={required} 
+        />
     );
 };
 

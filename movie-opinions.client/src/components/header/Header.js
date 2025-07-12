@@ -55,12 +55,12 @@ const Header = () => {
                 {user ? (
                     <>
                         <span className="header__username">Вітаю, {user.name}!</span>
-                        <Button className="button button--logout" onClick={handleLogout}>Вийти</Button>
+                        <Button className="button--logout" onClick={handleLogout}>Вийти</Button>
                     </>
                 ) : (
                     <>
-                        <Button className="button button--login" onClick={() => navigate("/login")}>Увійти</Button>
-                        <Button className="button button--register" onClick={() => console.log("Register")}>Зареєструватися</Button>
+                        <Button className="button--login" onClick={() => navigate("/login")}>Увійти</Button>
+                        <Button className="button--register" onClick={() => console.log("Register")}>Зареєструватися</Button>
                     </>
                 )}
             </nav>

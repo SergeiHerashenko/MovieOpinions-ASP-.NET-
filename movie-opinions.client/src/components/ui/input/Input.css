@@ -1,0 +1,18 @@
+.input {
+  width: 300px;
+  height: 45px;
+  border: none;
+  outline: none;
+  padding: 0px 7px;
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 15px;
+  background-color: transparent;
+  box-shadow: var(--shadow-input);
+}
+
+.input:focus {
+  border: 2px solid transparent;
+  color: var(--text-color);
+  box-shadow: var(--shadow-input--focus);
+}

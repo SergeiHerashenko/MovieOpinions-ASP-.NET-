@@ -1,0 +1,13 @@
+@import '../../../style/Variables.css';
+
+.form {
+    position: relative;
+    max-width: 500px;
+    border: var(--background-color) solid 1px;
+    background: var(--background-color);
+    padding: 20px 40px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-default);
+    box-sizing: border-box;
+    margin: 20px auto;
+}
