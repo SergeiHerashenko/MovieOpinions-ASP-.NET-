@@ -36,24 +36,25 @@
 }
 
 .form__field .form__label {
-  font-size: 15px;
-  padding-left: 10px;
-  position: absolute;
-  top: 13px;
-  transition: 0.3s;
-  pointer-events: none;
+    font-size: 15px;
+    padding-left: 10px;
+    position: absolute;
+    top: 13px;
+    transition: 0.3s;
+    pointer-events: none;
 }
 
 .form__field .input:focus ~ .form__label,
 .form__field .input:valid ~ .form__label {
-  transition: 0.3s;
-  padding-left: 2px;
-  transform: translateY(-35px);
+    transition: 0.3s;
+    padding-left: 2px;
+    transform: translateY(-35px);
+    opacity: 0.3;
 }
 
 .form__field .input:valid,
 .form__field .input:focus {
-  box-shadow: var(--shadow-input--focus);
+    box-shadow: var(--shadow-input--focus);
 }
 
 .button--submit {
@@ -77,6 +78,10 @@
     color: var(--text-color);
     font-family: var(--font-family-regular);
     margin: 40px 0;
+}
+
+.form__footer p {
+    font-size: 15px;
 }
 
 .form__footer a {

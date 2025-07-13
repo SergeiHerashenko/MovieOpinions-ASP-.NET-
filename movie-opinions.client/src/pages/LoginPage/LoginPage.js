@@ -14,24 +14,19 @@ const LoginPage = () => {
         const passwordUser = formData.get('passwordUser');
 
         try{
-            console.log(passwordUser)
-            const response = await fetch('https://localhost:7284/api/auth/login', {
+            const response = await fetch('https://localhost:7230/api/account/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    Login: loginUser,
-                    Password: passwordUser,
+                    LoginUser: loginUser,
+                    PasswordUser: passwordUser,
                 }),
             });
 
-            if(!response.ok){
-                console.log('Error');
-            }
-
             const data = await response.json();
-            console.log('Успішний логін:', data)
+            console.log(data)
         } catch (error) {
             alert(error.message);
         }
@@ -40,8 +35,8 @@ const LoginPage = () => {
     return(
         <Form onSubmit={handleSubmit}>
             <section className='form__header'>
-                <p>Вітаємо</p>
-                <h2>Увійдіть в систему!</h2>
+                <p>Вітаємо,</p>
+                <p>увійдіть в систему!</p>
             </section>
             <section className='form__fields'>
                 <div className='form__field'>
