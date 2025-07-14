@@ -117,11 +117,12 @@ namespace MovieOpinions.server.DAL.Repositories
                             }
                         }
                     }
-
+                    
                     return new BaseResponse<User>
                     {
                         StatusCode = Domain.Enum.StatusCode.NotFound,
-                        Description = "Користувача не знайдено!"
+                        Description = "Користувача не знайдено!",
+                        Data = null
                     };
                 }
                 catch (Exception ex) 

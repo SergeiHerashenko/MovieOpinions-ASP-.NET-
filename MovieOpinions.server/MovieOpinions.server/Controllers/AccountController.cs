@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieOpinions.server.Domain.Model.User;
 using MovieOpinions.server.Service.Interfaces;
 using System.Security.Claims;
+using XAct.Messages;
 
 namespace MovieOpinions.server.Controllers
 {
@@ -25,9 +26,45 @@ namespace MovieOpinions.server.Controllers
 
             if(Response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(Response.Data));
+                var Token = _accountService.GenerateJwtToken(Response.Data);
+
+                return Ok(new { 
+                    Token, 
+                    user = Response.Data 
+                });
             }
+
+            return StatusCode(
+                (int)Response.StatusCode,
+                new { message = Response.Description }
+            );
+        }
+
+        [HttpPost("registration")]
+        public async Task<IActionResult> Registration([FromBody] RegistrationModel FormData)
+        {
+            if(FormData.PasswordUser != FormData.ConfirmPasswordUser)
+            {
+                return StatusCode(422, new { message = "Паролі не співпадають!" });
+            }
+
+            var Response = await _accountService.Registartion(FormData);
+
+            if(Response.StatusCode == Domain.Enum.StatusCode.OK)
+            {
+                var Token = _accountService.GenerateJwtToken(Response.Data);
+
+                return Ok(new
+                {
+                    Token,
+                    user = Response.Data
+                });
+            }
+
+            return StatusCode(
+                (int)Response.StatusCode,
+                new { message = Response.Description }
+            );
         }
     }
 }

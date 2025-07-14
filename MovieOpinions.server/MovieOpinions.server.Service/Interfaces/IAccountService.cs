@@ -11,6 +11,10 @@ namespace MovieOpinions.server.Service.Interfaces
 {
     public interface IAccountService
     {
-        Task<BaseResponse<ClaimsIdentity>> Login(LoginModel LoginModel);
+        Task<BaseResponse<User>> Login(LoginModel LoginModel);
+
+        Task<BaseResponse<User>> Registartion(RegistrationModel RegistrationModel);
+
+        string GenerateJwtToken(User user);
     }
 }

@@ -1,7 +1,6 @@
 import NavLinks from '../header/NavLinks.js'
 import './Header.css';
 import '../../style/Variables.css';
-import '../../style/Globals.css';
 import Logo from "./Logo.js";
 import Button from '../ui/button/Button.js';
 import loginIcon from '../../assets/Image/Login_icon.png';
@@ -60,7 +59,7 @@ const Header = () => {
                 ) : (
                     <>
                         <Button className="button--login" onClick={() => navigate("/login")}>Увійти</Button>
-                        <Button className="button--register" onClick={() => console.log("Register")}>Зареєструватися</Button>
+                        <Button className="button--register" onClick={() => navigate("/register")}>Зареєструватися</Button>
                     </>
                 )}
             </nav>

@@ -1,0 +1,90 @@
+.form__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+p{
+    margin: 3px;
+}
+
+.form__header p {
+    display: flex;
+    justify-content: center;
+    font-family: var(--font-family-regular);
+    color: var(--text-color);
+    font-size: 20px;
+    margin: 0;
+}
+
+.form__fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 0;
+    gap: 40px
+}
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    position: relative;
+    color: var(--text-color);;
+    font-family: var(--font-family-regular);
+}
+
+.form__field .form__label {
+    font-size: 15px;
+    padding-left: 10px;
+    position: absolute;
+    top: 13px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.form__field .input:focus ~ .form__label,
+.form__field .input:valid ~ .form__label {
+    transition: 0.3s;
+    padding-left: 2px;
+    transform: translateY(-35px);
+    opacity: 0.3;
+}
+
+.form__field .input:valid,
+.form__field .input:focus {
+    box-shadow: var(--shadow-input--focus);
+}
+
+.button--submit {
+    width: 190px;
+    height: 50px;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.form__submit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--text-color);
+    font-family: var(--font-family-regular);
+    margin: 40px 0;
+}
+
+.form__footer p {
+    font-size: 15px;
+}
+
+.form__footer a {
+    color: var(--accent-color);
+}
