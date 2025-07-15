@@ -6,22 +6,76 @@ using MovieOpinions.server.Domain.Response;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace MovieOpinions.server.DAL.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private readonly IConnectMovieOpinions _connectMovieOpinions;
+
+        public UserRepository(IConnectMovieOpinions connectMovieOpinions)
+        {
+            _connectMovieOpinions = connectMovieOpinions;
+        }
+
         public Task<BaseResponse<bool>> BlockUser(User user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<User>> Create(User Entity)
+        public async Task<BaseResponse<User>> Create(User Entity)
         {
-            throw new NotImplementedException();
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.ConnectMovieOpinionsDataBase()))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    await using (var Transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            await InsertUserTableAsync(conn, Transaction, Entity);
+                            await InsertUserProfileTableAsync(conn, Transaction, Entity);
+                            await InsertUserSecurityTableAsync(conn, Transaction, Entity);
+
+                            await Transaction.CommitAsync();
+
+                            return new BaseResponse<User>()
+                            {
+                                Data = Entity,
+                                Description = "Користувач створений!",
+                                StatusCode = Domain.Enum.StatusCode.OK
+                            };
+                        }
+                        catch (Exception ex)
+                        {
+                            await Transaction.RollbackAsync();
+
+                            return new BaseResponse<User>()
+                            {
+                                Data = null,
+                                Description = "Помилка при створенні користувача!" + ex.Message,
+                                StatusCode = Domain.Enum.StatusCode.InternalServerError
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<User>()
+                    {
+                        Data = null,
+                        Description = "Помилка з базою данних!" + ex.Message,
+                        StatusCode = Domain.Enum.StatusCode.InternalServerError
+                    };
+                }
+            }
         }
 
         public Task<BaseResponse<bool>> Delete(User Entity)
@@ -31,9 +85,7 @@ namespace MovieOpinions.server.DAL.Repositories
 
         public async Task<BaseResponse<User>> GetUser(string LoginUser)
         {
-            ConnectMovieOpinions ConnectDatabase = new ConnectMovieOpinions();
-
-            using (var conn = new NpgsqlConnection(ConnectDatabase.ConnectMovieOpinionsDataBase()))
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.ConnectMovieOpinionsDataBase()))
             {
                 try
                 {
@@ -144,6 +196,59 @@ namespace MovieOpinions.server.DAL.Repositories
         public Task<BaseResponse<User>> Update(User Entity)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task InsertUserTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        {
+            var InsertUserTable = new NpgsqlCommand(
+                                "INSERT INTO " +
+                                    "User_Table (id_user, login_user, email_user, role_user) " +
+                                "VALUES (@Id, @Login, @Email, @Role);", conn, Transaction);
+
+            InsertUserTable.Parameters.AddWithValue("@Id", Entity.UserId);
+            InsertUserTable.Parameters.AddWithValue("@Login", Entity.LoginUser);
+            InsertUserTable.Parameters.Add("@Email", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.EmailUser ?? DBNull.Value;
+            InsertUserTable.Parameters.AddWithValue("@Role", (int)Entity.Role);
+
+            await InsertUserTable.ExecuteNonQueryAsync();
+        }
+
+        private async Task InsertUserProfileTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        {
+            var InsertUserProfileTable = new NpgsqlCommand(
+                                "INSERT INTO " +
+                                    "User_Profile_Table (id_user, firstname_user, lastname_user, bio_user, avatar_user, created_at, update_at) " +
+                                "VALUES (@Id, @FirstName, @LastName, @Bio, @Avatar, @CreatedAt, @UpdateAt);", conn, Transaction);
+
+            InsertUserProfileTable.Parameters.AddWithValue("@Id", Entity.UserId);
+            InsertUserProfileTable.Parameters.Add("@FirstName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.FirstName ?? DBNull.Value;
+            InsertUserProfileTable.Parameters.Add("@LastName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.LastName ?? DBNull.Value;
+            InsertUserProfileTable.Parameters.Add("@Bio", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.Bio ?? DBNull.Value;
+            InsertUserProfileTable.Parameters.Add("@Avatar", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.AvatarUrl ?? DBNull.Value;
+            InsertUserProfileTable.Parameters.Add("@CreatedAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Profile.CreatedAt ?? DBNull.Value;
+            InsertUserProfileTable.Parameters.Add("@UpdateAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Profile.UpdatedAt ?? DBNull.Value;
+
+            await InsertUserProfileTable.ExecuteNonQueryAsync();
+        }
+
+        private async Task InsertUserSecurityTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        {
+            var InsertUserSecurityTable = new NpgsqlCommand(
+                                "INSERT INTO " +
+                                    "User_Security_Table " +
+                                    "(id_user, password_hash_user, password_salt_user, failed_login_attempts, is_blocked, is_deleted, email_confirmed, last_login) " +
+                                "VALUES (@Id, @PasswordHash, @PasswordSalt, @FailedLogin, @IsBlocked, @IsDeleted, @EmailConfirmed, @LastLogin);", conn, Transaction);
+
+            InsertUserSecurityTable.Parameters.AddWithValue("@Id", Entity.UserId);
+            InsertUserSecurityTable.Parameters.AddWithValue("@PasswordHash", Entity.Security.PasswordHash);
+            InsertUserSecurityTable.Parameters.AddWithValue("@PasswordSalt", Entity.Security.PasswordSalt);
+            InsertUserSecurityTable.Parameters.AddWithValue("@FailedLogin", Entity.Security.FailedLoginAttempts);
+            InsertUserSecurityTable.Parameters.AddWithValue("@IsBlocked", Entity.Security.IsBlocked);
+            InsertUserSecurityTable.Parameters.AddWithValue("@IsDeleted", Entity.Security.IsDeleted);
+            InsertUserSecurityTable.Parameters.AddWithValue("@EmailConfirmed", Entity.Security.IsEmailConfirmed);
+            InsertUserSecurityTable.Parameters.Add("@LastLogin", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Security.LastLoginDate ?? DBNull.Value;
+
+            await InsertUserSecurityTable.ExecuteNonQueryAsync();
         }
     }
 }

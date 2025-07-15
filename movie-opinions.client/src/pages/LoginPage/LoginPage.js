@@ -6,7 +6,7 @@ import ModalWindow from '../../components/modalWindows/ModalWindow.js';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
@@ -36,6 +36,11 @@ const LoginPage = () => {
                 setModalMessage(data.message || 'Невірний логін або пароль');
                 setIsModalOpen(true);
                 return;
+            }
+            else{
+                localStorage.setItem('jwtToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                onLogin(data.user, data.token);
             }
 
         } catch (error) {

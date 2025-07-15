@@ -5,6 +5,7 @@ using MovieOpinions.server.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MovieOpinions.server.DAL.Connect_Database;
 
 
 public class Program
@@ -15,6 +16,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllers();
+        builder.Services.AddSingleton<IConnectMovieOpinions, ConnectMovieOpinions>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 

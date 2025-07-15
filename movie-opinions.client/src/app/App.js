@@ -1,27 +1,49 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useState } from 'react';
+
 import HomePage from '../pages/HomePage/HomePage.js';
 import LoginPage from '../pages/LoginPage/LoginPage.js';
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage.js';
-import './App.css';
 import MainLayout from '../layout/MainLayout.js';
 
+import './App.css';
+
+
 function App() {
+
+    const [user, setUser] = useState(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
+
+    const handleLogin = (userData, token) => {
+        localStorage.setItem('jwtToken', token);
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('user');
+        setUser(null);
+    };
+
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={
-                    <MainLayout>
+                    <MainLayout user={user} onLogout={handleLogout} >
                         <HomePage />
                     </MainLayout>
                 } />
                 <Route path='/login' element={
-                    <MainLayout>
-                        <LoginPage />
+                    <MainLayout user={user} onLogout={handleLogout} >
+                        <LoginPage onLogin={handleLogin} />
                     </MainLayout>
                 } />
                 <Route path='/register' element={
-                    <MainLayout>
-                        <RegistrationPage />
+                    <MainLayout user={user} onLogout={handleLogout} >
+                        <RegistrationPage onLogin={handleLogin} />
                     </MainLayout>
                 } />
             </Routes>

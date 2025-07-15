@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MovieOpinions.server.DAL.Connect_Database
 {
-    public class ConnectMovieOpinions
+    public class ConnectMovieOpinions : IConnectMovieOpinions
     {
         // IP-адреса сервера бази даних /The IP address of the database server/
         public string Host { get; private set; } = "";

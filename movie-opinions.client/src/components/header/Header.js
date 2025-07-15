@@ -7,19 +7,9 @@ import loginIcon from '../../assets/Image/Login_icon.png';
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const Header = () => {
+const Header = ({ user, onLogout }) => {
 
     const navigate = useNavigate();
-
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem("user");
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
-
-    const handleLogout = () => {
-        localStorage.removeItem("user");
-        setUser(null);
-    };
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
@@ -54,7 +44,7 @@ const Header = () => {
                 {user ? (
                     <>
                         <span className="header__username">Вітаю, {user.name}!</span>
-                        <Button className="button--logout" onClick={handleLogout}>Вийти</Button>
+                        <Button className="button--logout" onClick={onLogout}>Вийти</Button>
                     </>
                 ) : (
                     <>

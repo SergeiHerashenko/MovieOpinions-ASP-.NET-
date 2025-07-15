@@ -7,5 +7,6 @@
         NotFound = 404,
         Forbidden = 403,
         Gone = 410,
+        Conflict = 409
     }
 }
