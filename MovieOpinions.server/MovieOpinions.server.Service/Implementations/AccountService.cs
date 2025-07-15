@@ -160,97 +160,27 @@ namespace MovieOpinions.server.Service.Implementations
 
         public string GenerateJwtToken(User user)
         {
-            //var key = _configuration["Jwt:Key"];
-            //var issuer = _configuration["Jwt:Issuer"];
-            //var audience = _configuration["Jwt:Audience"];
-            //
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Claims = new Dictionary<string, object>
-            //    {
-            //        {"uid", "test-user-2" },
-            //        {"fullname", "Park Tokki" },
-            //        {"email", "tokki.park@test.com" },
-            //        {"ts", 1596611792131L },
-            //    },
-            //    SigningCredentials = new SigningCredentials(
-            //        new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this_is_test_secret_key_at_least_32_char")),
-            //        SecurityAlgorithms.HmacSha256Signature
-            //    )
-            //};
-            //
-            //var stoken = tokenHandler.CreateToken(tokenDescriptor);
-            //var token = tokenHandler.WriteToken(stoken);
-
-            // Крок 1: Claims
-            var nameIdentifier = user.UserId.ToString();
-            var login = user.LoginUser;
-
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, nameIdentifier),
-        new Claim(ClaimTypes.Name, login)
-    };
-
-            // Крок 2: Ключ
-            var jwtKey = _configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(jwtKey))
-                throw new Exception("JWT Key is missing or empty!");
-
-            var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
-            if (keyBytes.Length < 32)
-                throw new Exception("JWT Key must be at least 32 bytes!");
-
-            var securityKey = new SymmetricSecurityKey(keyBytes);
-
-            // Крок 3: Підпис
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            // Крок 4: Інші параметри
-            var issuer = _configuration["Jwt:Issuer"];
-            var audience = _configuration["Jwt:Audience"];
-            var expires = DateTime.UtcNow.AddHours(1);
-
-            if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-                throw new Exception("Issuer or Audience is missing");
-
-            // Крок 5: Створення токена
-            var jwtToken = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.LoginUser),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
+            
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: expires,
-                signingCredentials: credentials
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
             );
-
-            // Крок 6: Генерація рядка
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-
-            return tokenString;
-
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            //    new Claim(ClaimTypes.Name, user.LoginUser),
-            //    new Claim(ClaimTypes.Role, user.Role.ToString())
-            //};
-            //
-            //var key = new SymmetricSecurityKey(
-            //    Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            //
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            //
-            //var token = new JwtSecurityToken(
-            //    issuer: _configuration["Jwt:Issuer"],
-            //    audience: _configuration["Jwt:Audience"],
-            //    claims: claims,
-            //    expires: DateTime.UtcNow.AddHours(1),
-            //    signingCredentials: creds
-            //);
-            //
-            //return new JwtSecurityTokenHandler().WriteToken(token);;
-            //return token;
+            
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private BaseResponse<User> CheckUserAccess(BaseResponse<User> user)
