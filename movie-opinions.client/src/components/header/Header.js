@@ -43,7 +43,7 @@ const Header = ({ user, onLogout }) => {
             <nav className={`header__auth ${loginOpen ? "open" : ""}`}>
                 {user ? (
                     <>
-                        <span className="header__username">Вітаю, {user.name}!</span>
+                        <span className="header__username">Вітаю, {user.loginUser}!</span>
                         <Button className="button--logout" onClick={onLogout}>Вийти</Button>
                     </>
                 ) : (

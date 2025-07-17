@@ -1,13 +1,14 @@
 import './Header.css';
 import '../../style/Fonts.css';
 import { useLayoutEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const links = [
-    { id: 1, label: 'Головна' },
-    { id: 2, label: 'Фільми' },
-    { id: 3, label: 'Новинки' },
-    { id: 4, label: 'Залишити відгук' },
-    { id: 5, label: 'Контакти' }
+    { id: 1, label: 'Головна', path: '/' },
+    { id: 2, label: 'Фільми', path: '/films' },
+    { id: 3, label: 'Новинки', path: '/' },
+    { id: 4, label: 'Залишити відгук', path: '/' },
+    { id: 5, label: 'Контакти', path: '/' }
 ];
 
 const NavLink = ({menuOpen}) => {
@@ -73,7 +74,7 @@ const NavLink = ({menuOpen}) => {
             <ul ref={measurenebtRef} className='measurement-menu'>
                 {links.map((link, i) => (
                     <li key={link.id} ref={(el) => (itemRef.current[i] = el)}>
-                        <a href='#'>{link.label}</a>
+                        <Link to={link.path}>{link.label}</Link>
                     </li>
                 ))}
             </ul>
@@ -83,7 +84,7 @@ const NavLink = ({menuOpen}) => {
                 <ul className='header__menu'>
                     {links.slice(0, visibleCount).map((link) => (
                         <li key={link.id}>
-                            <a href='#'>{link.label}</a>
+                            <Link to={link.path}>{link.label}</Link>
                         </li>
                     ))}
 
@@ -94,7 +95,7 @@ const NavLink = ({menuOpen}) => {
                                 <ul className='header__dropdown'>
                                     {links.slice(visibleCount).map((link) => (
                                         <li key={link.id}>
-                                            <a href="#">{link.label}</a>
+                                            <Link to={link.path}>{link.label}</Link>
                                         </li>
                                     ))}
                                 </ul>

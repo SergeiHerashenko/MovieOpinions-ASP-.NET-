@@ -30,19 +30,28 @@ public class Program
         })
         .AddJwtBearer(options =>
         {
-            options.RequireHttpsMetadata = false;
-            options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-
                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
                 ValidAudience = builder.Configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    if (context.Request.Cookies.ContainsKey("jwt"))
+                    {
+                        context.Token = context.Request.Cookies["jwt"];
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
 
@@ -53,7 +62,8 @@ public class Program
                 {
                     policy.WithOrigins("http://localhost:3000")
                           .AllowAnyMethod()
-                          .AllowAnyHeader();
+                          .AllowAnyHeader()
+                          .AllowCredentials();
                 });
         });
 
@@ -67,7 +77,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseStaticFiles();
         app.UseCors("AllowFrontend");
 
         app.UseAuthentication();

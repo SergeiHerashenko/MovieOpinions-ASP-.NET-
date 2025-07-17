@@ -5,6 +5,7 @@ using MovieOpinions.server.Domain.Model.User;
 using MovieOpinions.server.Service.Interfaces;
 using System.Security.Claims;
 using XAct.Messages;
+using Microsoft.AspNetCore.Http;
 
 namespace MovieOpinions.server.Controllers
 {
@@ -28,10 +29,15 @@ namespace MovieOpinions.server.Controllers
             {
                 var Token = _accountService.GenerateJwtToken(Response.Data);
 
-                return Ok(new { 
-                    Token, 
-                    user = Response.Data 
+                HttpContext.Response.Cookies.Append("jwt", Token, new CookieOptions
+                {
+                    HttpOnly = true,               
+                    Secure = true,                 
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
                 });
+
+                return Ok(new { user = Response.Data });
             }
 
             return StatusCode(
@@ -54,11 +60,15 @@ namespace MovieOpinions.server.Controllers
             {
                 var Token = _accountService.GenerateJwtToken(Response.Data);
 
-                return Ok(new
+                HttpContext.Response.Cookies.Append("jwt", Token, new CookieOptions
                 {
-                    Token,
-                    user = Response.Data
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
                 });
+
+                return Ok(new { user = Response.Data });
             }
 
             return StatusCode(

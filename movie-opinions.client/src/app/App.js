@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import HomePage from '../pages/HomePage/HomePage.js';
 import LoginPage from '../pages/LoginPage/LoginPage.js';
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage.js';
+import FilmPage from '../pages/FilmPage/FilmPage.js';
 import MainLayout from '../layout/MainLayout.js';
 
 import './App.css';
@@ -44,6 +45,11 @@ function App() {
                 <Route path='/register' element={
                     <MainLayout user={user} onLogout={handleLogout} >
                         <RegistrationPage onLogin={handleLogin} />
+                    </MainLayout>
+                } />
+                <Route path='/films' element={
+                    <MainLayout user={user} onLogout={handleLogout} >
+                        <FilmPage onLogin={handleLogin} />
                     </MainLayout>
                 } />
             </Routes>

@@ -24,6 +24,7 @@ const LoginPage = ({ onLogin }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     LoginUser: loginUser,
                     PasswordUser: passwordUser,
@@ -42,7 +43,6 @@ const LoginPage = ({ onLogin }) => {
                 localStorage.setItem('user', JSON.stringify(data.user));
                 onLogin(data.user, data.token);
             }
-
         } catch (error) {
             setModalMessage(`Отакої... що сталось з сервером. Код помилки ${error}`);
             setIsModalOpen(true);

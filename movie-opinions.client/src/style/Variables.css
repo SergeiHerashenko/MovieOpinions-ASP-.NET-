@@ -15,6 +15,8 @@
                       inset -5px -5px 10px #222;
     --shadow-hover: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222,
                     inset -5px -5px 10px #444;
+    --shadow-default: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #444,
+                      inset -5px -5px 10px #222;
 
     /* ==== Шрифти ==== */
     --font-family-akronim: 'Akronim';
