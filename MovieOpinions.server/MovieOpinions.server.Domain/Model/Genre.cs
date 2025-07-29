@@ -8,7 +8,7 @@ namespace MovieOpinions.server.Domain.Model
 {
     public class Genre
     {
-        public int IdGenre { get; private set; }
-        public string NameGenre { get; private set; }
+        public int IdGenre { get; set; }
+        public string NameGenre { get; set; }
     }
 }

@@ -10,8 +10,8 @@ namespace MovieOpinions.server.DAL.Interface
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Task<BaseResponse<User>> GetUser(string LoginUser);
-        Task<BaseResponse<User>> GetUserId(int Id);
+        Task<BaseResponse<User>> GetUser(string loginUser);
+        Task<BaseResponse<User>> GetUserId(int id);
         Task<BaseResponse<bool>> BlockUser(User user);
     }
 }

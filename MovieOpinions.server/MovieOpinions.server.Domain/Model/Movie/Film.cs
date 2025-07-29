@@ -8,10 +8,10 @@ namespace MovieOpinions.server.Domain.Model.Movie
 {
     public class Film
     {
-        public int IdFilm { get; private set; }
+        public int IdFilm { get; set; }
 
-        public string NameFilm { get; private set; }
+        public string NameFilm { get; set; }
 
-        public int YearFilm { get; private set; }
+        public int YearFilm { get; set; }
     }
 }

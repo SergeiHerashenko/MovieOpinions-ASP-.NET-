@@ -8,12 +8,12 @@ namespace MovieOpinions.server.Domain.Helpers
 {
     public class CheckingCorrectnessPassword
     {
-        public async Task<bool> VerifyPassword(string EnteredPassword, string PasswordSalt, string StoredHash)
+        public async Task<bool> VerifyPassword(string enteredPassword, string passwordSalt, string storedHash)
         {
             // Шифруємо введений пароль з використанням ключа (солі)
-            string EnteredHash = await new HashPassword().GetHashedPassword(EnteredPassword, PasswordSalt);
+            string enteredHash = await new HashPassword().GetHashedPassword(enteredPassword, passwordSalt);
             // Порівнюємо отриманий хеш зі збереженим хешем
-            return StoredHash.Equals(EnteredHash);
+            return storedHash.Equals(enteredHash);
         }
     }
 }

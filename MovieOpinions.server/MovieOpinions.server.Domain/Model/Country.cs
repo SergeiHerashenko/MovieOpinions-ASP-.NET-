@@ -8,8 +8,8 @@ namespace MovieOpinions.server.Domain.Model
 {
     public class Country
     {
-        public int IdCountry { get; private set; }
+        public int IdCountry { get; set; }
 
-        public string NameCountry { get; private set; }
+        public string NameCountry { get; set; }
     }
 }

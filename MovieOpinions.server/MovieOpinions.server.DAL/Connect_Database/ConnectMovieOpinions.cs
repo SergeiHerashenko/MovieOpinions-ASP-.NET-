@@ -20,17 +20,17 @@ namespace MovieOpinions.server.DAL.Connect_Database
         // Порт підключення до бази даних /Database connection port/
         public string Port { get; private set; } = "";
         // Назва бази даних /The name of the database/
-        public string DataBaseName { get; private set; } = "";
+        public string DatabaseName { get; private set; } = "";
 
         // Рядок підключення до бази /Connection string to the database/
-        public string ConnectMovieOpinionsDataBase()
+        public string GetConnectMovieOpinionsDataBase()
         {
             string connString =
             string.Format(
                 "Server={0};Username={1};Database={2};Port={3};Password={4};SSLMode=Prefer",
                 Host,
                 User,
-                DataBaseName,
+                DatabaseName,
                 Port,
                 Password);
 

@@ -9,14 +9,14 @@ namespace MovieOpinions.server.Domain.Model.Actors
 {
     public class DetailedActor : Actor
     {
-        public DateTime BirthdayActor { get; private set; }
+        public DateTime BirthdayActor { get; set; }
 
-        public IEnumerable<Film> FilmActor { get; private set; }
+        public IEnumerable<Film> FilmsActor { get; set; }
 
-        public IEnumerable<Genre> GenreActor { get; private set; }
+        public IEnumerable<Genre> GenresActor { get; set; }
 
-        public string CountryActor { get; private set; }
+        public string CountryActor { get; set; }
 
-        public string URLImageActor { get; private set; }
+        public string URLImageActor { get; set; }
     }
 }

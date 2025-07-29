@@ -9,16 +9,18 @@ namespace MovieOpinions.server.Domain.Model.Movie
 {
     public class DetailedFilm : Film
     {
-        public string DescriptionFilm { get; private set; }
+        public string DescriptionFilm { get; set; }
 
-        public IEnumerable<Actor> ActorFilm { get; private set; }
+        public IEnumerable<Actor> ActorFilm { get; set; }
 
-        public IEnumerable<Genre> GenreFilm { get; private set; }
+        public IEnumerable<Genre> GenreFilm { get; set; }
 
-        public IEnumerable<Country> CountryFilm { get; private set; }
+        public IEnumerable<Country> CountryFilm { get; set; }
 
-        public double RatingFilm { get; private set; }
+        public string DirectorFilm { get; set; }
 
-        public string URLImageFilm { get; private set; }
+        public double RatingFilm { get; set; }
+
+        public string URLImageFilm { get; set; }
     }
 }

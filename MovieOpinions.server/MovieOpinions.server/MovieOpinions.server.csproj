@@ -18,4 +18,8 @@
     <ProjectReference Include="..\MovieOpinions.server.Service\MovieOpinions.server.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Image\Actor\" />
+  </ItemGroup>
+
 </Project>

@@ -28,34 +28,34 @@ namespace MovieOpinions.server.DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<BaseResponse<User>> Create(User Entity)
+        public async Task<BaseResponse<User>> Create(User entity)
         {
-            using (var conn = new NpgsqlConnection(_connectMovieOpinions.ConnectMovieOpinionsDataBase()))
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
             {
                 try
                 {
                     await conn.OpenAsync();
 
-                    await using (var Transaction = conn.BeginTransaction())
+                    await using (var transaction = conn.BeginTransaction())
                     {
                         try
                         {
-                            await InsertUserTableAsync(conn, Transaction, Entity);
-                            await InsertUserProfileTableAsync(conn, Transaction, Entity);
-                            await InsertUserSecurityTableAsync(conn, Transaction, Entity);
+                            await InsertUserTableAsync(conn, transaction, entity);
+                            await InsertUserProfileTableAsync(conn, transaction, entity);
+                            await InsertUserSecurityTableAsync(conn, transaction, entity);
 
-                            await Transaction.CommitAsync();
+                            await transaction.CommitAsync();
 
                             return new BaseResponse<User>()
                             {
-                                Data = Entity,
+                                Data = entity,
                                 Description = "Користувач створений!",
                                 StatusCode = Domain.Enum.StatusCode.OK
                             };
                         }
                         catch (Exception ex)
                         {
-                            await Transaction.RollbackAsync();
+                            await transaction.RollbackAsync();
 
                             return new BaseResponse<User>()
                             {
@@ -78,20 +78,20 @@ namespace MovieOpinions.server.DAL.Repositories
             }
         }
 
-        public Task<BaseResponse<bool>> Delete(User Entity)
+        public Task<BaseResponse<bool>> Delete(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BaseResponse<User>> GetUser(string LoginUser)
+        public async Task<BaseResponse<User>> GetUser(string loginUser)
         {
-            using (var conn = new NpgsqlConnection(_connectMovieOpinions.ConnectMovieOpinionsDataBase()))
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
             {
                 try
                 {
                     await conn.OpenAsync();
 
-                    using (var GetUserCommand = new NpgsqlCommand(
+                    using (var getUserCommand = new NpgsqlCommand(
                         "SELECT " +
                             "User_Table.id_user, " +
                             "User_Table.login_user, " +
@@ -121,42 +121,42 @@ namespace MovieOpinions.server.DAL.Repositories
                         "WHERE " +
                             "User_Table.login_user = @LoginUser", conn))
                     {
-                        GetUserCommand.Parameters.AddWithValue("@LoginUser", LoginUser);
+                        getUserCommand.Parameters.AddWithValue("@LoginUser", loginUser);
 
-                        using (var ReaderInformationUser = await GetUserCommand.ExecuteReaderAsync())
+                        using (var readerInformationUser = await getUserCommand.ExecuteReaderAsync())
                         {
-                            if (ReaderInformationUser.Read())
+                            if (readerInformationUser.Read())
                             {
                                 User user = new User
                                 {
-                                    UserId = Guid.Parse(ReaderInformationUser["id_user"].ToString()),
-                                    LoginUser = ReaderInformationUser["login_user"].ToString(),
-                                    EmailUser = ReaderInformationUser["email_user"].ToString(),
-                                    Role = (Role)Convert.ToInt32(ReaderInformationUser["role_user"]),
+                                    UserId = Guid.Parse(readerInformationUser["id_user"].ToString()),
+                                    LoginUser = readerInformationUser["login_user"].ToString(),
+                                    EmailUser = readerInformationUser["email_user"].ToString(),
+                                    Role = (Role)Convert.ToInt32(readerInformationUser["role_user"]),
 
                                     Profile = new UserProfile
                                     {
-                                        FirstName = ReaderInformationUser["firstname_user"].ToString(),
-                                        LastName = ReaderInformationUser["lastname_user"].ToString(),
-                                        Bio = ReaderInformationUser["bio_user"].ToString(),
-                                        AvatarUrl = ReaderInformationUser["avatar_user"].ToString(),
-                                        CreatedAt = Convert.ToDateTime(ReaderInformationUser["created_at"]),
-                                        UpdatedAt = ReaderInformationUser["update_at"] == DBNull.Value
+                                        FirstName = readerInformationUser["firstname_user"].ToString(),
+                                        LastName = readerInformationUser["lastname_user"].ToString(),
+                                        Bio = readerInformationUser["bio_user"].ToString(),
+                                        AvatarUrl = readerInformationUser["avatar_user"].ToString(),
+                                        CreatedAt = Convert.ToDateTime(readerInformationUser["created_at"]),
+                                        UpdatedAt = readerInformationUser["update_at"] == DBNull.Value
                                             ? DateTime.MinValue
-                                            : Convert.ToDateTime(ReaderInformationUser["update_at"].ToString()),
+                                            : Convert.ToDateTime(readerInformationUser["update_at"].ToString()),
                                     },
 
                                     Security = new UserSecurity
                                     {
-                                        PasswordHash = ReaderInformationUser["password_hash_user"].ToString(),
-                                        PasswordSalt = ReaderInformationUser["password_salt_user"].ToString(),
-                                        FailedLoginAttempts = Convert.ToInt32(ReaderInformationUser["failed_login_attempts"].ToString()),
-                                        IsBlocked = Convert.ToBoolean(ReaderInformationUser["is_blocked"]),
-                                        IsDeleted = Convert.ToBoolean(ReaderInformationUser["is_deleted"]),
-                                        IsEmailConfirmed = Convert.ToBoolean(ReaderInformationUser["email_confirmed"]),
-                                        LastLoginDate = ReaderInformationUser["last_login"] == DBNull.Value
+                                        PasswordHash = readerInformationUser["password_hash_user"].ToString(),
+                                        PasswordSalt = readerInformationUser["password_salt_user"].ToString(),
+                                        FailedLoginAttempts = Convert.ToInt32(readerInformationUser["failed_login_attempts"].ToString()),
+                                        IsBlocked = Convert.ToBoolean(readerInformationUser["is_blocked"]),
+                                        IsDeleted = Convert.ToBoolean(readerInformationUser["is_deleted"]),
+                                        IsEmailConfirmed = Convert.ToBoolean(readerInformationUser["email_confirmed"]),
+                                        LastLoginDate = readerInformationUser["last_login"] == DBNull.Value
                                             ? DateTime.MinValue
-                                            : Convert.ToDateTime(ReaderInformationUser["last_login"].ToString()),
+                                            : Convert.ToDateTime(readerInformationUser["last_login"].ToString()),
                                     }
                                 };
 
@@ -188,67 +188,67 @@ namespace MovieOpinions.server.DAL.Repositories
             }
         }
 
-        public Task<BaseResponse<User>> GetUserId(int Id)
+        public Task<BaseResponse<User>> GetUserId(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<User>> Update(User Entity)
+        public Task<BaseResponse<User>> Update(User entity)
         {
             throw new NotImplementedException();
         }
 
-        private async Task InsertUserTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        private async Task InsertUserTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
         {
-            var InsertUserTable = new NpgsqlCommand(
+            var insertUserTable = new NpgsqlCommand(
                                 "INSERT INTO " +
                                     "User_Table (id_user, login_user, email_user, role_user) " +
-                                "VALUES (@Id, @Login, @Email, @Role);", conn, Transaction);
+                                "VALUES (@Id, @Login, @Email, @Role);", conn, transaction);
 
-            InsertUserTable.Parameters.AddWithValue("@Id", Entity.UserId);
-            InsertUserTable.Parameters.AddWithValue("@Login", Entity.LoginUser);
-            InsertUserTable.Parameters.Add("@Email", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.EmailUser ?? DBNull.Value;
-            InsertUserTable.Parameters.AddWithValue("@Role", (int)Entity.Role);
+            insertUserTable.Parameters.AddWithValue("@Id", entity.UserId);
+            insertUserTable.Parameters.AddWithValue("@Login", entity.LoginUser);
+            insertUserTable.Parameters.Add("@Email", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)entity.EmailUser ?? DBNull.Value;
+            insertUserTable.Parameters.AddWithValue("@Role", (int)entity.Role);
 
-            await InsertUserTable.ExecuteNonQueryAsync();
+            await insertUserTable.ExecuteNonQueryAsync();
         }
 
-        private async Task InsertUserProfileTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        private async Task InsertUserProfileTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
         {
-            var InsertUserProfileTable = new NpgsqlCommand(
+            var insertUserProfileTable = new NpgsqlCommand(
                                 "INSERT INTO " +
                                     "User_Profile_Table (id_user, firstname_user, lastname_user, bio_user, avatar_user, created_at, update_at) " +
-                                "VALUES (@Id, @FirstName, @LastName, @Bio, @Avatar, @CreatedAt, @UpdateAt);", conn, Transaction);
+                                "VALUES (@Id, @FirstName, @LastName, @Bio, @Avatar, @CreatedAt, @UpdateAt);", conn, transaction);
 
-            InsertUserProfileTable.Parameters.AddWithValue("@Id", Entity.UserId);
-            InsertUserProfileTable.Parameters.Add("@FirstName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.FirstName ?? DBNull.Value;
-            InsertUserProfileTable.Parameters.Add("@LastName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.LastName ?? DBNull.Value;
-            InsertUserProfileTable.Parameters.Add("@Bio", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.Bio ?? DBNull.Value;
-            InsertUserProfileTable.Parameters.Add("@Avatar", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)Entity.Profile.AvatarUrl ?? DBNull.Value;
-            InsertUserProfileTable.Parameters.Add("@CreatedAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Profile.CreatedAt ?? DBNull.Value;
-            InsertUserProfileTable.Parameters.Add("@UpdateAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Profile.UpdatedAt ?? DBNull.Value;
+            insertUserProfileTable.Parameters.AddWithValue("@Id", entity.UserId);
+            insertUserProfileTable.Parameters.Add("@FirstName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)entity.Profile.FirstName ?? DBNull.Value;
+            insertUserProfileTable.Parameters.Add("@LastName", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)entity.Profile.LastName ?? DBNull.Value;
+            insertUserProfileTable.Parameters.Add("@Bio", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)entity.Profile.Bio ?? DBNull.Value;
+            insertUserProfileTable.Parameters.Add("@Avatar", NpgsqlTypes.NpgsqlDbType.Varchar).Value = (object?)entity.Profile.AvatarUrl ?? DBNull.Value;
+            insertUserProfileTable.Parameters.Add("@CreatedAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)entity.Profile.CreatedAt ?? DBNull.Value;
+            insertUserProfileTable.Parameters.Add("@UpdateAt", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)entity.Profile.UpdatedAt ?? DBNull.Value;
 
-            await InsertUserProfileTable.ExecuteNonQueryAsync();
+            await insertUserProfileTable.ExecuteNonQueryAsync();
         }
 
-        private async Task InsertUserSecurityTableAsync(NpgsqlConnection conn, NpgsqlTransaction Transaction, User Entity)
+        private async Task InsertUserSecurityTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
         {
-            var InsertUserSecurityTable = new NpgsqlCommand(
+            var insertUserSecurityTable = new NpgsqlCommand(
                                 "INSERT INTO " +
                                     "User_Security_Table " +
                                     "(id_user, password_hash_user, password_salt_user, failed_login_attempts, is_blocked, is_deleted, email_confirmed, last_login) " +
-                                "VALUES (@Id, @PasswordHash, @PasswordSalt, @FailedLogin, @IsBlocked, @IsDeleted, @EmailConfirmed, @LastLogin);", conn, Transaction);
+                                "VALUES (@Id, @PasswordHash, @PasswordSalt, @FailedLogin, @IsBlocked, @IsDeleted, @EmailConfirmed, @LastLogin);", conn, transaction);
 
-            InsertUserSecurityTable.Parameters.AddWithValue("@Id", Entity.UserId);
-            InsertUserSecurityTable.Parameters.AddWithValue("@PasswordHash", Entity.Security.PasswordHash);
-            InsertUserSecurityTable.Parameters.AddWithValue("@PasswordSalt", Entity.Security.PasswordSalt);
-            InsertUserSecurityTable.Parameters.AddWithValue("@FailedLogin", Entity.Security.FailedLoginAttempts);
-            InsertUserSecurityTable.Parameters.AddWithValue("@IsBlocked", Entity.Security.IsBlocked);
-            InsertUserSecurityTable.Parameters.AddWithValue("@IsDeleted", Entity.Security.IsDeleted);
-            InsertUserSecurityTable.Parameters.AddWithValue("@EmailConfirmed", Entity.Security.IsEmailConfirmed);
-            InsertUserSecurityTable.Parameters.Add("@LastLogin", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)Entity.Security.LastLoginDate ?? DBNull.Value;
+            insertUserSecurityTable.Parameters.AddWithValue("@Id", entity.UserId);
+            insertUserSecurityTable.Parameters.AddWithValue("@PasswordHash", entity.Security.PasswordHash);
+            insertUserSecurityTable.Parameters.AddWithValue("@PasswordSalt", entity.Security.PasswordSalt);
+            insertUserSecurityTable.Parameters.AddWithValue("@FailedLogin", entity.Security.FailedLoginAttempts);
+            insertUserSecurityTable.Parameters.AddWithValue("@IsBlocked", entity.Security.IsBlocked);
+            insertUserSecurityTable.Parameters.AddWithValue("@IsDeleted", entity.Security.IsDeleted);
+            insertUserSecurityTable.Parameters.AddWithValue("@EmailConfirmed", entity.Security.IsEmailConfirmed);
+            insertUserSecurityTable.Parameters.Add("@LastLogin", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)entity.Security.LastLoginDate ?? DBNull.Value;
 
-            await InsertUserSecurityTable.ExecuteNonQueryAsync();
+            await insertUserSecurityTable.ExecuteNonQueryAsync();
         }
     }
 }

@@ -17,16 +17,19 @@ function App() {
         return storedUser ? JSON.parse(storedUser) : null;
     });
 
-    const handleLogin = (userData, token) => {
-        localStorage.setItem('jwtToken', token);
+    const handleLogin = (userData) => {
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('jwtToken');
         localStorage.removeItem('user');
         setUser(null);
+
+        fetch('https://localhost:7230/api/account/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
     };
 
     return (

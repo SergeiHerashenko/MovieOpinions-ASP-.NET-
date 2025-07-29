@@ -21,60 +21,68 @@ namespace MovieOpinions.server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel FormData)
+        public async Task<IActionResult> Login([FromBody] LoginModel formData)
         {
-            var Response = await _accountService.Login(FormData);
+            var response = await _accountService.Login(formData);
 
-            if(Response.StatusCode == Domain.Enum.StatusCode.OK)
+            if(response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                var Token = _accountService.GenerateJwtToken(Response.Data);
+                var token = _accountService.GenerateJwtToken(response.Data);
 
-                HttpContext.Response.Cookies.Append("jwt", Token, new CookieOptions
-                {
-                    HttpOnly = true,               
-                    Secure = true,                 
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddHours(1)
-                });
+                SetJwtCookie(token);
 
-                return Ok(new { user = Response.Data });
+                return Ok(new { user = response.Data });
             }
 
             return StatusCode(
-                (int)Response.StatusCode,
-                new { message = Response.Description }
+                (int)response.StatusCode,
+                new { message = response.Description }
             );
         }
 
         [HttpPost("registration")]
-        public async Task<IActionResult> Registration([FromBody] RegistrationModel FormData)
+        public async Task<IActionResult> Registration([FromBody] RegistrationModel formData)
         {
-            if(FormData.PasswordUser != FormData.ConfirmPasswordUser)
+            if(formData.PasswordUser != formData.ConfirmPasswordUser)
             {
                 return StatusCode(422, new { message = "Паролі не співпадають!" });
             }
 
-            var Response = await _accountService.Registartion(FormData);
+            var response = await _accountService.Registration(formData);
 
-            if(Response.StatusCode == Domain.Enum.StatusCode.OK)
+            if(response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                var Token = _accountService.GenerateJwtToken(Response.Data);
+                var token = _accountService.GenerateJwtToken(response.Data);
 
-                HttpContext.Response.Cookies.Append("jwt", Token, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddHours(1)
-                });
+                SetJwtCookie(token);
 
-                return Ok(new { user = Response.Data });
+                return Ok(new { user = response.Data });
             }
 
             return StatusCode(
-                (int)Response.StatusCode,
-                new { message = Response.Description }
+                (int)response.StatusCode,
+                new { message = response.Description }
             );
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Response.Cookies.Delete("jwt");
+
+            return Ok(new { message = "Ви вийшли з системи" });
+        }
+
+
+        private void SetJwtCookie(string token)
+        {
+            HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
         }
     }
 }

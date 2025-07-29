@@ -3,10 +3,12 @@ import Form from '../../components/ui/form/Form.js';
 import Input from '../../components/ui/input/Input.js';
 import Button from '../../components/ui/button/Button.js';
 import ModalWindow from '../../components/modalWindows/ModalWindow.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
 const LoginPage = ({ onLogin }) => {
+
+    const navigate = useNavigate();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
@@ -39,9 +41,9 @@ const LoginPage = ({ onLogin }) => {
                 return;
             }
             else{
-                localStorage.setItem('jwtToken', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                onLogin(data.user, data.token);
+                onLogin(data.user);
+                navigate('/films');
             }
         } catch (error) {
             setModalMessage(`Отакої... що сталось з сервером. Код помилки ${error}`);

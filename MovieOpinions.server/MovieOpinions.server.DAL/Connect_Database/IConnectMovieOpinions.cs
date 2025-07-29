@@ -16,8 +16,8 @@ namespace MovieOpinions.server.DAL.Connect_Database
 
         string Port { get; }
 
-        string DataBaseName { get; }
+        string DatabaseName { get; }
 
-        string ConnectMovieOpinionsDataBase();
+        string GetConnectMovieOpinionsDataBase();
     }
 }

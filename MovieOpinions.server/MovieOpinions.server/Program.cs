@@ -19,6 +19,8 @@ public class Program
         builder.Services.AddSingleton<IConnectMovieOpinions, ConnectMovieOpinions>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IFilmService, FilmService>();
+        builder.Services.AddScoped<IFilmRepository, FilmRepository>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

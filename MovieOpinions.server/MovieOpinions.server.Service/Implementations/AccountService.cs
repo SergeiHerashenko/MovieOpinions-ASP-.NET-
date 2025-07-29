@@ -27,38 +27,38 @@ namespace MovieOpinions.server.Service.Implementations
             _configuration = configuration;
         }
 
-        public async Task<BaseResponse<User>> Login(LoginModel LoginModel)
+        public async Task<BaseResponse<User>> Login(LoginModel loginModel)
         {
             try
             {
-                var GetUser = await _userRepository.GetUser(LoginModel.LoginUser);
+                var getUser = await _userRepository.GetUser(loginModel.LoginUser);
 
-                if(GetUser.StatusCode != Domain.Enum.StatusCode.OK)
+                if(getUser.StatusCode != Domain.Enum.StatusCode.OK)
                 {
                     return new BaseResponse<User>
                     {
-                        Description = GetUser.Description,
-                        StatusCode = GetUser.StatusCode,
+                        Description = getUser.Description,
+                        StatusCode = getUser.StatusCode,
                     };
                 }
 
-                bool IsPasswordCorrect = await new CheckingCorrectnessPassword().VerifyPassword(
-                    LoginModel.PasswordUser,
-                    GetUser.Data.Security.PasswordSalt,
-                    GetUser.Data.Security.PasswordHash);
+                bool isPasswordCorrect = await new CheckingCorrectnessPassword().VerifyPassword(
+                    loginModel.PasswordUser,
+                    getUser.Data.Security.PasswordSalt,
+                    getUser.Data.Security.PasswordHash);
 
-                if (!IsPasswordCorrect)
+                if (!isPasswordCorrect)
                 {
                     return new BaseResponse<User>
                     {
                         Description = "Невірний логін або пароль!",
-                        StatusCode = Domain.Enum.StatusCode.NotFound
+                        StatusCode = Domain.Enum.StatusCode.Forbidden
                     };
                 }
 
-                var IsAccess =  CheckUserAccess(GetUser);
+                var isAccess =  CheckUserAccess(getUser);
 
-                return IsAccess;
+                return isAccess;
             }
             catch (Exception ex)
             {
@@ -70,13 +70,13 @@ namespace MovieOpinions.server.Service.Implementations
             }
         }
 
-        public async Task<BaseResponse<User>> Registartion(RegistrationModel RegistrationModel)
+        public async Task<BaseResponse<User>> Registration(RegistrationModel registrationModel)
         {
             try
             {
-                var GetUser = await _userRepository.GetUser(RegistrationModel.LoginUser);
+                var getUser = await _userRepository.GetUser(registrationModel.LoginUser);
 
-                if(GetUser.StatusCode == Domain.Enum.StatusCode.OK)
+                if(getUser.StatusCode == Domain.Enum.StatusCode.OK)
                 {
                     return new BaseResponse<User>
                     {
@@ -85,15 +85,15 @@ namespace MovieOpinions.server.Service.Implementations
                     };
                 }
 
-                if(GetUser.StatusCode == Domain.Enum.StatusCode.NotFound)
+                if(getUser.StatusCode == Domain.Enum.StatusCode.NotFound)
                 {
-                    string PasswordSalt = Guid.NewGuid().ToString();
-                    string EncryptionPassword = await new HashPassword().GetHashedPassword(RegistrationModel.PasswordUser, PasswordSalt);
+                    string passwordSalt = Guid.NewGuid().ToString();
+                    string encryptionPassword = await new HashPassword().GetHashedPassword(registrationModel.PasswordUser, passwordSalt);
 
-                    var NewUser = new User()
+                    var newUser = new User()
                     {
                         UserId = Guid.NewGuid(),
-                        LoginUser = RegistrationModel.LoginUser,
+                        LoginUser = registrationModel.LoginUser,
                         EmailUser = null,
                         Role = 0,
 
@@ -109,8 +109,8 @@ namespace MovieOpinions.server.Service.Implementations
 
                         Security = new UserSecurity()
                         {
-                            PasswordHash = EncryptionPassword,
-                            PasswordSalt = PasswordSalt,
+                            PasswordHash = encryptionPassword,
+                            PasswordSalt = passwordSalt,
                             FailedLoginAttempts = 0,
                             IsBlocked = false,
                             IsDeleted = false,
@@ -119,13 +119,13 @@ namespace MovieOpinions.server.Service.Implementations
                         }
                     };
 
-                    var RegisterUser = await _userRepository.Create(NewUser);
+                    var registerUser = await _userRepository.Create(newUser);
 
-                    if (RegisterUser.Data != null)
+                    if (registerUser.Data != null)
                     {
                         return new BaseResponse<User>()
                         {
-                            Data = RegisterUser.Data,
+                            Data = registerUser.Data,
                             Description = "Користувач зареєстрований!",
                             StatusCode = Domain.Enum.StatusCode.OK
                         };
@@ -134,8 +134,8 @@ namespace MovieOpinions.server.Service.Implementations
                     {
                         return new BaseResponse<User>()
                         {
-                            Description = RegisterUser.Description,
-                            StatusCode = RegisterUser.StatusCode
+                            Description = registerUser.Description,
+                            StatusCode = registerUser.StatusCode
                         };
                     }
                 }
@@ -143,8 +143,8 @@ namespace MovieOpinions.server.Service.Implementations
                 {
                     return new BaseResponse<User>()
                     {
-                        Description = GetUser.Description,
-                        StatusCode = GetUser.StatusCode
+                        Description = getUser.Description,
+                        StatusCode = getUser.StatusCode
                     };
                 }
             }
@@ -183,9 +183,9 @@ namespace MovieOpinions.server.Service.Implementations
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private BaseResponse<User> CheckUserAccess(BaseResponse<User> user)
+        private BaseResponse<User> CheckUserAccess(BaseResponse<User> userResponse)
         {
-            if (user.Data.Security.IsBlocked)
+            if (userResponse.Data.Security.IsBlocked)
             {
                 return new BaseResponse<User>()
                 {
@@ -194,7 +194,7 @@ namespace MovieOpinions.server.Service.Implementations
                 };
             }
 
-            if(user.Data.Security.IsDeleted)
+            if(userResponse.Data.Security.IsDeleted)
             {
                 return new BaseResponse<User>
                 {
@@ -207,7 +207,7 @@ namespace MovieOpinions.server.Service.Implementations
             {
                 Description = "Користувач має доступ!",
                 StatusCode = Domain.Enum.StatusCode.OK,
-                Data = user.Data
+                Data = userResponse.Data
             };
         }
     }

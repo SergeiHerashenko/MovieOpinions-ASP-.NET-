@@ -40,9 +40,8 @@ const RegistrationPage = ({ onLogin }) => {
                 return;
             }
             else{
-                localStorage.setItem('jwtToken', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                onLogin(data.user, data.token);
+                onLogin(data.user);
             }
 
         } catch (error) {
