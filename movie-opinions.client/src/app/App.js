@@ -6,6 +6,7 @@ import LoginPage from '../pages/LoginPage/LoginPage.js';
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage.js';
 import FilmPage from '../pages/FilmPage/FilmPage.js';
 import MainLayout from '../layout/MainLayout.js';
+import FilmDetailed from '../pages/FilmDetailed/FilmDetailed.js';
 
 import './App.css';
 
@@ -53,6 +54,11 @@ function App() {
                 <Route path='/films' element={
                     <MainLayout user={user} onLogout={handleLogout} >
                         <FilmPage onLogin={handleLogin} />
+                    </MainLayout>
+                } />
+                <Route path='/films/:idFilm' element={
+                    <MainLayout user={user} onLogout={handleLogout} >
+                        <FilmDetailed onLogin={handleLogin} />
                     </MainLayout>
                 } />
             </Routes>

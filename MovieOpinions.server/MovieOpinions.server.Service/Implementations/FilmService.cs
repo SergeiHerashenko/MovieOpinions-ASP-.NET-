@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MovieOpinions.server.Service.Implementations
@@ -21,14 +22,45 @@ namespace MovieOpinions.server.Service.Implementations
 
         public async Task<BaseResponse<IEnumerable<Film>>> GetAllFilms()
         {
-            var response = await _filmRepository.GetAllFilms();
+            var getAllFilms = await _filmRepository.GetAllFilms();
 
-            return response;
+            if(getAllFilms.StatusCode != Domain.Enum.StatusCode.OK)
+            {
+                return new BaseResponse<IEnumerable<Film>>()
+                {
+                    Description = getAllFilms.Description,
+                    StatusCode = getAllFilms.StatusCode,
+                };
+            }
+
+            foreach(var allFilms in getAllFilms.Data)
+            {
+                string[] words = Regex.Split(allFilms.NameFilm, @"\W+");
+                string filmImage = $"https://localhost:7230/Image/Film/{string.Join("_", words)}.jpg";
+                allFilms.ImageFilm = filmImage;
+            }
+
+            return new BaseResponse<IEnumerable<Film>>()
+            {
+                Data = getAllFilms.Data,
+                StatusCode = Domain.Enum.StatusCode.OK
+            };
         }
 
         public async Task<BaseResponse<DetailedFilm>> GetFilm(int idFilm)
         {
-            throw new NotImplementedException();
+            var getFilm = await _filmRepository.GetFilmById(idFilm);
+
+            if(getFilm.StatusCode != Domain.Enum.StatusCode.OK)
+            {
+                return new BaseResponse<DetailedFilm>()
+                {
+                    Description = getFilm.Description,
+                    StatusCode = getFilm.StatusCode,
+                };
+            }
+
+
         }
 
         public async Task<BaseResponse<IEnumerable<Film>>> GetFilmByGenre(int idGenre)

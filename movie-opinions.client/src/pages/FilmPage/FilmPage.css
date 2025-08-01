@@ -1,1 +1,37 @@
 @import '../../style/Variables.css';
+
+.content{
+    display: flex;
+    gap: 20px;
+}
+
+.content-filter{
+    flex: 2;
+}
+
+.movie-grid {
+    flex: 9;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;    
+}
+
+.content-filter {
+    width: 250px; /* або 200-300px — залежить від дизайну */
+    align-self: flex-start;
+    position: sticky;
+    top: 150px;
+}
+
+summary {
+    color: var(--text-color);
+    font-family: var(--font-family-regular);
+}
+
+ul {
+    list-style-type: none;
+    color: var(--text-color);
+    font-family: var(--font-family-regular);
+    padding: 0;
+    margin: 20px;
+}

@@ -7,7 +7,7 @@ namespace MovieOpinions.server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FilmController : Controller
+    public class FilmController : ControllerBase
     {
         private readonly IFilmService _filmService;
 
@@ -30,6 +30,22 @@ namespace MovieOpinions.server.Controllers
                 (int)response.StatusCode,
                 new { message = response.Description }
             );
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFilmById(int idFilm)
+        {
+            var response = await _filmService.GetFilm(idFilm);
+
+            if(response.StatusCode != Domain.Enum.StatusCode.OK)
+            {
+                return StatusCode(
+                     (int)response.StatusCode,
+                     new { message = response.Description }
+                );
+            }
+
+            return Ok(new { films = response.Data });
         }
     }
 }

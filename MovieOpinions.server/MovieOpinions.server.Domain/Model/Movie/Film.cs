@@ -13,5 +13,7 @@ namespace MovieOpinions.server.Domain.Model.Movie
         public string NameFilm { get; set; }
 
         public int YearFilm { get; set; }
+
+        public string ImageFilm { get; set; }
     }
 }

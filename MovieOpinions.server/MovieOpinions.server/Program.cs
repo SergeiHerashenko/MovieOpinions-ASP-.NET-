@@ -21,6 +21,8 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IFilmService, FilmService>();
         builder.Services.AddScoped<IFilmRepository, FilmRepository>();
+        builder.Services.AddScoped<IGenreService, GenreService>();
+        builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

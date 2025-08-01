@@ -11,5 +11,6 @@ namespace MovieOpinions.server.DAL.Interface
     public interface IFilmRepository : IBaseRepository<Film>
     {
         Task<BaseResponse<IEnumerable<Film>>> GetAllFilms();
+        Task<BaseResponse<Film>> GetFilmById(int idFilm);
     }
 }

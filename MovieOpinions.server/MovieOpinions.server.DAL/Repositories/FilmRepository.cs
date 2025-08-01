@@ -88,6 +88,61 @@ namespace MovieOpinions.server.DAL.Repositories
             }
         }
 
+        public async Task<BaseResponse<Film>> GetFilmById(int idFilm)
+        {
+            using(var conn =  new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    await using(var getFilm = new NpgsqlCommand(
+                        "SELECT " +
+                            "id_film, name_film, year_film " +
+                        "FROM " +
+                            "Film_Table " +
+                        "WHERE " +
+                            "id_film = @ID_FILM", conn))
+                    {
+                        getFilm.Parameters.AddWithValue("ID_Film", idFilm);
+
+                        using (var reader = await getFilm.ExecuteReaderAsync())
+                        {
+                            if (reader.Read())
+                            {
+                                Film film = new Film()
+                                {
+                                    IdFilm = Convert.ToInt32(reader["id_film"]),
+                                    NameFilm = reader["name_film"].ToString(),
+                                    YearFilm = Convert.ToInt32(reader["year_film"])
+                                };
+
+                                return new BaseResponse<Film>()
+                                {
+                                    Data = film,
+                                    StatusCode = Domain.Enum.StatusCode.OK
+                                };
+                            }
+
+                            return new BaseResponse<Film>()
+                            {
+                                StatusCode = Domain.Enum.StatusCode.NotFound,
+                                Description = "Фільм не знайдено"
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<Film>()
+                    {
+                        StatusCode = Domain.Enum.StatusCode.InternalServerError,
+                        Description = ex.Message
+                    };
+                }
+            }
+        }
+
         public Task<BaseResponse<Film>> Update(Film entity)
         {
             throw new NotImplementedException();
