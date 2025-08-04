@@ -15,7 +15,7 @@ namespace MovieOpinions.server.DAL.Connect_Database
         public string User { get; private set; } = "";
 
         // Пароль для підключення до бази даних /Password to connect to the database/
-        public string Password { get; private set; } = "gogutoviz81";
+        public string Password { get; private set; } = "";
 
         // Порт підключення до бази даних /Database connection port/
         public string Port { get; private set; } = "";
