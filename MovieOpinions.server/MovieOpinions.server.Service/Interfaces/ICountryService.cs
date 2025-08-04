@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MovieOpinions.server.Service.Interfaces
 {
-    public interface IGenreService
+    public interface ICountryService
     {
-        Task<BaseResponse<IEnumerable<Genre>>> GetAllGenre();
-        Task<BaseResponse<IEnumerable<Genre>>> GetGenreFilm(int idFilm);
+        Task<BaseResponse<IEnumerable<Country>>> GetCountryByFilm(int idFilm);
     }
 }

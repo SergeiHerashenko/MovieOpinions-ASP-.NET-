@@ -23,6 +23,10 @@ public class Program
         builder.Services.AddScoped<IFilmRepository, FilmRepository>();
         builder.Services.AddScoped<IGenreService, GenreService>();
         builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+        builder.Services.AddScoped<IActorService, ActorService>();
+        builder.Services.AddScoped<IActorRepository, ActorRepository>();
+        builder.Services.AddScoped<ICountryService, CountryService>();
+        builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

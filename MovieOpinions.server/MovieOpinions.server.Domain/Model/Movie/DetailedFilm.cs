@@ -20,7 +20,5 @@ namespace MovieOpinions.server.Domain.Model.Movie
         public string DirectorFilm { get; set; }
 
         public double RatingFilm { get; set; }
-
-        public string URLImageFilm { get; set; }
     }
 }

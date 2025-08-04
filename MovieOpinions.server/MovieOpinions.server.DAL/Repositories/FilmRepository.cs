@@ -60,7 +60,7 @@ namespace MovieOpinions.server.DAL.Repositories
                                 films.Add(film);
                             }
 
-                            if (films.Count == 0)
+                            if (!films.Any())
                             {
                                 return new BaseResponse<IEnumerable<Film>>()
                                 {
@@ -135,6 +135,61 @@ namespace MovieOpinions.server.DAL.Repositories
                 catch (Exception ex)
                 {
                     return new BaseResponse<Film>()
+                    {
+                        StatusCode = Domain.Enum.StatusCode.InternalServerError,
+                        Description = ex.Message
+                    };
+                }
+            }
+        }
+
+        public async Task<BaseResponse<DetailedFilm>> GetFilmDetailed(int idFilm)
+        {
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    await using (var getDetailsFilm = new NpgsqlCommand(
+                        "SELECT " +
+                            "id_film, director_film, description_film " +
+                        "FROM " +
+                            "Film_Details_Table " +
+                        "WHERE " +
+                            "id_film = @ID_FILM", conn))
+                    {
+                        getDetailsFilm.Parameters.AddWithValue("ID_Film", idFilm);
+
+                        using (var reader = await getDetailsFilm.ExecuteReaderAsync())
+                        {
+                            if (reader.Read())
+                            {
+                                DetailedFilm film = new DetailedFilm()
+                                {
+                                    IdFilm = Convert.ToInt32(reader["id_film"]),
+                                    DirectorFilm = reader["director_film"].ToString(),
+                                    DescriptionFilm = reader["description_film"].ToString()
+                                };
+
+                                return new BaseResponse<DetailedFilm>()
+                                {
+                                    Data = film,
+                                    StatusCode = Domain.Enum.StatusCode.OK
+                                };
+                            }
+
+                            return new BaseResponse<DetailedFilm>()
+                            {
+                                StatusCode = Domain.Enum.StatusCode.NotFound,
+                                Description = "Фільм не знайдено"
+                            };
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<DetailedFilm>()
                     {
                         StatusCode = Domain.Enum.StatusCode.InternalServerError,
                         Description = ex.Message

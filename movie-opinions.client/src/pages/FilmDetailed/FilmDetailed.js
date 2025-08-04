@@ -22,13 +22,13 @@ const FilmDetailed = () => {
     if (!film) {
         return <div>Завантаження...</div>;
     }
-
+    
     return (
         <div className='film-details'>
             <h2>{film.nameFilm}</h2>
             <img src={film.imageFilm} alt='Постер' />
             <p><strong>Рік:</strong> {film.yearFilm}</p>
-            <p><strong>Опис:</strong> {film.description}</p>
+            <p><strong>Опис:</strong> {film.descriptionFilm}</p>
             {/* додай інші поля */}
         </div>
     );

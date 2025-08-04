@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MovieOpinions.server.DAL.Interface
 {
-    public interface IGenreRepository : IBaseRepository<Genre>
+    public interface ICountryRepository : IBaseRepository<Country>
     {
-        Task<BaseResponse<IEnumerable<Genre>>> GetAllGenre();
-        Task<BaseResponse<IEnumerable<Genre>>> GetGenreFilm(int idFilm);
+        Task<BaseResponse<IEnumerable<Country>>> GetCountryMovie(int IdFilm);
     }
 }

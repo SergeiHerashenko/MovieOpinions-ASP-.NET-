@@ -12,5 +12,6 @@ namespace MovieOpinions.server.DAL.Interface
     {
         Task<BaseResponse<IEnumerable<Film>>> GetAllFilms();
         Task<BaseResponse<Film>> GetFilmById(int idFilm);
+        Task<BaseResponse<DetailedFilm>> GetFilmDetailed(int idFilm);
     }
 }

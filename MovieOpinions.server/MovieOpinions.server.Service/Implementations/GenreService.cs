@@ -38,5 +38,25 @@ namespace MovieOpinions.server.Service.Implementations
                 StatusCode = Domain.Enum.StatusCode.OK
             };
         }
+
+        public async Task<BaseResponse<IEnumerable<Genre>>> GetGenreFilm(int idFilm)
+        {
+            var getGenreFilm = await _genreRepository.GetGenreFilm(idFilm);
+
+            if(getGenreFilm.StatusCode != Domain.Enum.StatusCode.OK)
+            {
+                return new BaseResponse<IEnumerable<Genre>>()
+                {
+                    Description = getGenreFilm.Description,
+                    StatusCode = getGenreFilm.StatusCode
+                };
+            }
+
+            return new BaseResponse<IEnumerable<Genre>>()
+            {
+                Data = getGenreFilm.Data,
+                StatusCode = Domain.Enum.StatusCode.OK
+            };
+        }
     }
 }

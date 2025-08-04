@@ -33,7 +33,7 @@ namespace MovieOpinions.server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetFilmById(int idFilm)
+        public async Task<IActionResult> GetFilmById([FromRoute(Name = "id")] int idFilm)
         {
             var response = await _filmService.GetFilm(idFilm);
 
@@ -45,7 +45,7 @@ namespace MovieOpinions.server.Controllers
                 );
             }
 
-            return Ok(new { films = response.Data });
+            return Ok(response.Data);
         }
     }
 }
