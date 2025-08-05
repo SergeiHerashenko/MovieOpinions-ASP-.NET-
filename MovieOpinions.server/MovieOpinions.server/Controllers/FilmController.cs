@@ -45,7 +45,7 @@ namespace MovieOpinions.server.Controllers
                 );
             }
 
-            return Ok(response.Data);
+            return Ok(new { film = response.Data });
         }
     }
 }

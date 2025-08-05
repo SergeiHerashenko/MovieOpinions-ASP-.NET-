@@ -1,0 +1,36 @@
+@import '../../../style/Variables.css';
+
+.film {
+    display: flex;
+}
+
+.film_image {
+    border-radius: 20px;
+    width: 200px;
+    height: 300px;
+}
+
+.film__info{
+    margin: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.film__details {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.film__label {
+    font-weight: bold;
+    min-width: 150px;
+}
+
+.film__value {
+
+}
+
+a {
+    color: var(--text-color);
+}

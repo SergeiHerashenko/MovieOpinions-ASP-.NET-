@@ -1,5 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { data, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+
+import './FilmDetailed.css'
+
+import DetailedFilmForm from '../../components/ui/detailedFilmForm/DetailedFilmForm.js';
 
 const FilmDetailed = () => {
     const { idFilm } = useParams();
@@ -10,7 +14,7 @@ const FilmDetailed = () => {
             try {
                 const response = await fetch(`https://localhost:7230/api/Film/${idFilm}`);
                 const data = await response.json();
-                setFilm(data);
+                setFilm(data.film);
             } catch (error) {
                 console.error('Помилка завантаження фільму:', error);
             }
@@ -18,19 +22,17 @@ const FilmDetailed = () => {
 
         fetchFilm();
     }, [idFilm]);
-
-    if (!film) {
-        return <div>Завантаження...</div>;
-    }
     
+    if(!film){
+        return(
+            <div className='Error'>
+                Ой! Або фільм утік з кадру, або наш сервер вирішив піти на перерву. Спробуй ще раз за мить!
+            </div>
+        );
+    }
+
     return (
-        <div className='film-details'>
-            <h2>{film.nameFilm}</h2>
-            <img src={film.imageFilm} alt='Постер' />
-            <p><strong>Рік:</strong> {film.yearFilm}</p>
-            <p><strong>Опис:</strong> {film.descriptionFilm}</p>
-            {/* додай інші поля */}
-        </div>
+        <DetailedFilmForm film = {film} ></DetailedFilmForm>
     );
 };
 

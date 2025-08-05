@@ -24,5 +24,6 @@ html, body {
 }
 
 .layout__content {
+    display: flex;
     flex: 1; /* тягне main на всю доступну висоту між header і footer */
 }
