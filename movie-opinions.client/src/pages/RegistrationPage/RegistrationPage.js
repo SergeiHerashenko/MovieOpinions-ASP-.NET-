@@ -2,9 +2,11 @@ import Form from '../../components/ui/form/Form.js';
 import Input from '../../components/ui/input/Input.js';
 import Button from '../../components/ui/button/Button.js';
 import ModalWindow from '../../components/modalWindows/ModalWindow.js';
+
 import './RegistrationPage.css';
+
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const RegistrationPage = ({ onLogin }) => {
 

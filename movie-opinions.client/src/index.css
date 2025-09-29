@@ -2,7 +2,6 @@
 
 /* Стилізації фонового зображення /Stylization of the background image/ */
 body {
-    background-image: var(--bg-image); /* Встановлює зображення фону сайту /Sets the background image of the site/ */
     background-position: var(--bg-position); /* Встановлює позицію зображення фону по центру /Sets the position of the background image in the center/ */
     background-size: var(--bg-size); /* Масштабує зображення фону, щоб воно покривало всю площу /Scales the background image to cover the entire area/ */
     background-repeat: no-repeat; /* Вимикає повторення зображення фону /Disables background image repetition/ */
@@ -22,4 +21,16 @@ body::before {
     box-sizing: border-box; /* Враховує рамки та відступи в розмірах елемента /Includes border and padding in the element's dimensions */
     background-color: var(--bg-overlay-color); /* Встановлює прозорий чорний фон для елемента /Sets a semi-transparent black background for the element */
     z-index: -1; /* Встановлює елемент позаду основного вмісту /Sets the element behind the main content */
+}
+
+.DefaultImg {
+    background-image: var(--bg-image); /* Встановлює зображення фону сайту /Sets the background image of the site/ */
+}
+
+.CastomImg {
+    background-image: var(--bg-image-2); /* Встановлює зображення фону сайту /Sets the background image of the site/ */
+}
+
+.CastomImg::before{
+    display: none;
 }

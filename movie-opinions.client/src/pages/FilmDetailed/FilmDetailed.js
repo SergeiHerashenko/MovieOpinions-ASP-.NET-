@@ -1,9 +1,9 @@
-import { data, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import './FilmDetailed.css'
 
-import DetailedFilmForm from '../../components/ui/detailedFilmForm/DetailedFilmForm.js';
+import FormDetailedFilm from '../../components/ui/formDetailedFilm/FormDetailedFilm.js';
 
 const FilmDetailed = () => {
     const { idFilm } = useParams();
@@ -15,6 +15,8 @@ const FilmDetailed = () => {
                 const response = await fetch(`https://localhost:7230/api/Film/${idFilm}`);
                 const data = await response.json();
                 setFilm(data.film);
+                
+                document.title = data.film.nameFilm;
             } catch (error) {
                 console.error('Помилка завантаження фільму:', error);
             }
@@ -32,7 +34,7 @@ const FilmDetailed = () => {
     }
 
     return (
-        <DetailedFilmForm film = {film} ></DetailedFilmForm>
+        <FormDetailedFilm film = {film} ></FormDetailedFilm>
     );
 };
 

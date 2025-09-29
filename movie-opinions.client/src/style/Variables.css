@@ -1,6 +1,7 @@
 :root{
     /* ==== Фон сайту ==== */
     --bg-image: url(../assets/Image/Background_Image.png);
+    --bg-image-2: url(../assets/Image/Background_Image_2.png);
     --bg-position: center center;
     --bg-size: cover;
     --margin-body: 0 10px;

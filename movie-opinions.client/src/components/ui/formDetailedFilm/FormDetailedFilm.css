@@ -1,0 +1,51 @@
+@import '../../../style/Variables.css';
+
+.film {
+    display: flex;
+}
+
+.film_image {
+    border-radius: 20px;
+    width: 200px;
+    height: 300px;
+}
+
+.film__info{
+    margin: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.film__details {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.film__label {
+    font-weight: bold;
+    min-width: 150px;
+    font-family: 'Arsenal-Regular';
+    color: #fbb264;
+}
+
+.film__value,
+.film__value a {
+    font-family: "Arsenal-Italic";
+    color:  #ffffff;
+    line-height: 1.6;
+    text-decoration: underline;
+}
+
+.film__details__namefilm {
+    color: #FF8304;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Arsenal-Bold';
+}
+
+.film__description{
+    font-family: "Arsenal-Regular";
+    color:  #ffffff;
+    line-height: 1.6;
+}

@@ -1,9 +1,11 @@
 import './HomePage.css';
+
 import imageOne from '../../assets/Image/HomePage/Image_One.png';
 import imageTwo from '../../assets/Image/HomePage/Image_Two.png';
 import imageThree from '../../assets/Image/HomePage/Image_Three.png';
 import imageFour from '../../assets/Image/HomePage/Image_Four.png';
-import { useLayoutEffect, useRef, useState } from 'react';
+
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 
 const images = [
     {id: 1, src: imageOne, alt: "Movie1", className: "img--rotate-left"},
@@ -16,6 +18,10 @@ const HomePage = () => {
     const containerRef = useRef(null);
     const measurementRef = useRef(null);
     const itemRef = useRef([]);
+
+    useEffect(() => {
+        document.title = "Movie Opinions - Головна";
+    });
 
     const [visibleImage, setVisibleImage] = useState(images.length);
 

@@ -1,5 +1,6 @@
 import './Header.css';
 import '../../style/Fonts.css';
+
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ const links = [
 ];
 
 const NavLink = ({menuOpen}) => {
+    
     const conteinerRef = useRef(null);
     const measurenebtRef = useRef(null);
     const itemRef = useRef([]);
@@ -25,7 +27,8 @@ const NavLink = ({menuOpen}) => {
 
             //  Не виконувати логіку на мобільних екранах
             if (window.innerWidth < 730) {
-                setVisibleCount(links.length); // Показати всі
+                // Показати всі
+                setVisibleCount(links.length); 
                 return;
             }
 
@@ -61,7 +64,7 @@ const NavLink = ({menuOpen}) => {
         const resizeObserver = new ResizeObserver(updateVisibleItems);
         resizeObserver.observe(conteinerRef.current); 
 
-        // Обов'язково видаляємо слухача при демонтажі компонента
+        // Видаляємо слухача при демонтажі компонента
         return () => {
             resizeObserver.disconnect();
             window.removeEventListener('resize', updateVisibleItems);

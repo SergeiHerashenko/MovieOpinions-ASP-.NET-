@@ -1,5 +1,7 @@
 import './FilmPage.css';
+
 import { useEffect, useState } from 'react';
+
 import FormFilm from '../../components/ui/formFilm/FormFilm.js';
 
 const FilmPage = () => {
@@ -8,6 +10,9 @@ const FilmPage = () => {
     const [filter, setFilter] = useState([]);
 
     useEffect(() => {
+        
+        document.title = "Movie Opinions - Фільми";
+
         const fetchFilms = async () => {
             try {
                 const [filmsResponse, genresResponse] = await Promise.all([

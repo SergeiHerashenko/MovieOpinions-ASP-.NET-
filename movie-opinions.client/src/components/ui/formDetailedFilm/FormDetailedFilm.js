@@ -1,4 +1,4 @@
-import './DetailedFilmForm.css';
+import './FormDetailedFilm.css';
 
 import { Link } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const DetailedFilmForm = ({ film }) => {
             </figure>
             <div className='film__info'>
                 <div className='film__details'>
-                    <span>{film.nameFilm}</span>
+                    <span className='film__details__namefilm'>{film.nameFilm}</span>
                 </div>
                 <div className='film__details'>
                     <span className="film__label">Рік фільму:</span>

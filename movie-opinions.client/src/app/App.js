@@ -10,9 +10,8 @@ import FilmDetailed from '../pages/FilmDetailed/FilmDetailed.js';
 
 import './App.css';
 
-
 function App() {
-
+    
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem('user');
         return storedUser ? JSON.parse(storedUser) : null;
