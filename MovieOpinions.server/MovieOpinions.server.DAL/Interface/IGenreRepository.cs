@@ -11,6 +11,7 @@ namespace MovieOpinions.server.DAL.Interface
     public interface IGenreRepository : IBaseRepository<Genre>
     {
         Task<BaseResponse<IEnumerable<Genre>>> GetAllGenre();
+
         Task<BaseResponse<IEnumerable<Genre>>> GetGenreFilm(int idFilm);
     }
 }

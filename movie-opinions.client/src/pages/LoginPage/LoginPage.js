@@ -43,8 +43,20 @@ const LoginPage = ({ onLogin }) => {
                 return;
             }
             else{
-                localStorage.setItem('user', JSON.stringify(data.user));
-                onLogin(data.user);
+                const user = data.user;
+                const security = user.security;
+
+                const { passwordHash, passwordSalt, ...safeSecurity } = security;
+
+                const { security: _, ...restUser } = user;
+
+                const safeUser = {
+                ...restUser,
+                security: safeSecurity
+                };
+
+                localStorage.setItem('user', JSON.stringify(safeUser));
+                onLogin(safeUser);
                 navigate('/films');
             }
         } catch (error) {

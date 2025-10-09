@@ -25,27 +25,27 @@
 .film__label {
     font-weight: bold;
     min-width: 150px;
-    font-family: 'Arsenal-Regular';
+    font-family: var(--font-family-regular);
     color: #fbb264;
 }
 
 .film__value,
 .film__value a {
-    font-family: "Arsenal-Italic";
-    color:  #ffffff;
+    font-family: var(--font-family-italic);
+    color:  var(--text-color);
     line-height: 1.6;
     text-decoration: underline;
 }
 
 .film__details__namefilm {
-    color: #FF8304;
+    color: var(--accent-color);
     font-size: 30px;
     font-weight: bold;
-    font-family: 'Arsenal-Bold';
+    font-family: var(--font-family-regular);
 }
 
 .film__description{
-    font-family: "Arsenal-Regular";
-    color:  #ffffff;
+    font-family: var(--font-family-regular);
+    color: var(--text-color);
     line-height: 1.6;
 }

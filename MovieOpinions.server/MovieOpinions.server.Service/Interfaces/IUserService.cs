@@ -3,18 +3,15 @@ using MovieOpinions.server.Domain.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MovieOpinions.server.Service.Interfaces
 {
-    public interface IAccountService
+    public interface IUserService
     {
-        Task<BaseResponse<UserEntity>> Login(LoginModel loginModel);
+        Task<BaseResponse<UserEntity>> GetUserByIdAsync(Guid idUser);
 
-        Task<BaseResponse<UserEntity>> Registration(RegistrationModel registrationModel);
-
-        string GenerateJwtToken(UserEntity user);
+        Task<BaseResponse<UserProfile>> GetUserProfileById(Guid idUser);
     }
 }

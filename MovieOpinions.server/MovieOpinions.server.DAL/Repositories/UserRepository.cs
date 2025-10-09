@@ -23,12 +23,12 @@ namespace MovieOpinions.server.DAL.Repositories
             _connectMovieOpinions = connectMovieOpinions;
         }
 
-        public Task<BaseResponse<bool>> BlockUser(User user)
+        public Task<BaseResponse<bool>> BlockUser(UserEntity user)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BaseResponse<User>> Create(User entity)
+        public async Task<BaseResponse<UserEntity>> Create(UserEntity entity)
         {
             using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
             {
@@ -46,7 +46,7 @@ namespace MovieOpinions.server.DAL.Repositories
 
                             await transaction.CommitAsync();
 
-                            return new BaseResponse<User>()
+                            return new BaseResponse<UserEntity>()
                             {
                                 Data = entity,
                                 Description = "Користувач створений!",
@@ -57,7 +57,7 @@ namespace MovieOpinions.server.DAL.Repositories
                         {
                             await transaction.RollbackAsync();
 
-                            return new BaseResponse<User>()
+                            return new BaseResponse<UserEntity>()
                             {
                                 Data = null,
                                 Description = "Помилка при створенні користувача!" + ex.Message,
@@ -68,7 +68,7 @@ namespace MovieOpinions.server.DAL.Repositories
                 }
                 catch (Exception ex)
                 {
-                    return new BaseResponse<User>()
+                    return new BaseResponse<UserEntity>()
                     {
                         Data = null,
                         Description = "Помилка з базою данних!" + ex.Message,
@@ -78,12 +78,12 @@ namespace MovieOpinions.server.DAL.Repositories
             }
         }
 
-        public Task<BaseResponse<bool>> Delete(User entity)
+        public Task<BaseResponse<bool>> Delete(UserEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BaseResponse<User>> GetUser(string loginUser)
+        public async Task<BaseResponse<UserEntity>> GetUser(string loginUser)
         {
             using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
             {
@@ -127,40 +127,9 @@ namespace MovieOpinions.server.DAL.Repositories
                         {
                             if (readerInformationUser.Read())
                             {
-                                User user = new User
-                                {
-                                    UserId = Guid.Parse(readerInformationUser["id_user"].ToString()),
-                                    LoginUser = readerInformationUser["login_user"].ToString(),
-                                    EmailUser = readerInformationUser["email_user"].ToString(),
-                                    Role = (Role)Convert.ToInt32(readerInformationUser["role_user"]),
+                                var user = MapReaderToUser(readerInformationUser);
 
-                                    Profile = new UserProfile
-                                    {
-                                        FirstName = readerInformationUser["firstname_user"].ToString(),
-                                        LastName = readerInformationUser["lastname_user"].ToString(),
-                                        Bio = readerInformationUser["bio_user"].ToString(),
-                                        AvatarUrl = readerInformationUser["avatar_user"].ToString(),
-                                        CreatedAt = Convert.ToDateTime(readerInformationUser["created_at"]),
-                                        UpdatedAt = readerInformationUser["update_at"] == DBNull.Value
-                                            ? DateTime.MinValue
-                                            : Convert.ToDateTime(readerInformationUser["update_at"].ToString()),
-                                    },
-
-                                    Security = new UserSecurity
-                                    {
-                                        PasswordHash = readerInformationUser["password_hash_user"].ToString(),
-                                        PasswordSalt = readerInformationUser["password_salt_user"].ToString(),
-                                        FailedLoginAttempts = Convert.ToInt32(readerInformationUser["failed_login_attempts"].ToString()),
-                                        IsBlocked = Convert.ToBoolean(readerInformationUser["is_blocked"]),
-                                        IsDeleted = Convert.ToBoolean(readerInformationUser["is_deleted"]),
-                                        IsEmailConfirmed = Convert.ToBoolean(readerInformationUser["email_confirmed"]),
-                                        LastLoginDate = readerInformationUser["last_login"] == DBNull.Value
-                                            ? DateTime.MinValue
-                                            : Convert.ToDateTime(readerInformationUser["last_login"].ToString()),
-                                    }
-                                };
-
-                                return new BaseResponse<User>()
+                                return new BaseResponse<UserEntity>()
                                 {
                                     Data = user,
                                     Description = "Користувач знайдений!",
@@ -170,7 +139,7 @@ namespace MovieOpinions.server.DAL.Repositories
                         }
                     }
                     
-                    return new BaseResponse<User>
+                    return new BaseResponse<UserEntity>
                     {
                         StatusCode = Domain.Enum.StatusCode.NotFound,
                         Description = "Користувача не знайдено!",
@@ -179,7 +148,7 @@ namespace MovieOpinions.server.DAL.Repositories
                 }
                 catch (Exception ex) 
                 {
-                    return new BaseResponse<User>
+                    return new BaseResponse<UserEntity>
                     {
                         StatusCode = Domain.Enum.StatusCode.InternalServerError,
                         Description = ex.Message
@@ -188,17 +157,86 @@ namespace MovieOpinions.server.DAL.Repositories
             }
         }
 
-        public Task<BaseResponse<User>> GetUserId(int id)
+        public async Task<BaseResponse<UserEntity>> GetUserId(Guid idUser)
+        {
+            using (var conn = new NpgsqlConnection(_connectMovieOpinions.GetConnectMovieOpinionsDataBase()))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    using (var getUserById = new NpgsqlCommand(
+                        "SELECT " +
+                            "User_Table.id_user, " +
+                            "User_Table.login_user, " +
+                            "User_Table.email_user, " +
+                            "User_Table.role_user, " +
+                            "" +
+                            "User_Profile_Table.firstname_user, " +
+                            "User_Profile_Table.lastname_user, " +
+                            "User_Profile_Table.bio_user, " +
+                            "User_Profile_Table.avatar_user, " +
+                            "User_Profile_Table.created_at, " +
+                            "User_Profile_Table.update_at, " +
+                            "" +
+                            "User_Security_Table.password_hash_user, " +
+                            "User_Security_Table.password_salt_user, " +
+                            "User_Security_Table.failed_login_attempts, " +
+                            "User_Security_Table.is_blocked, " +
+                            "User_Security_Table.is_deleted, " +
+                            "User_Security_Table.email_confirmed, " +
+                            "User_Security_Table.last_login " +
+                        "FROM " +
+                            "User_Table " +
+                        "JOIN " +
+                            "User_Profile_Table ON User_Table.id_user = User_Profile_Table.id_user " +
+                        "JOIN " +
+                            "User_Security_Table ON User_Table.id_user = User_Security_Table.id_user " +
+                        "WHERE " +
+                            "User_Table.id_user = @ID_USER", conn))
+                    {
+                        getUserById.Parameters.AddWithValue("@ID_USER", idUser);
+
+                        using (var readerInformationUser = await getUserById.ExecuteReaderAsync())
+                        {
+                            if (readerInformationUser.Read())
+                            {
+                                var user = MapReaderToUser(readerInformationUser);
+
+                                return new BaseResponse<UserEntity>()
+                                {
+                                    Data = user,
+                                    Description = "Користувач знайдений!",
+                                    StatusCode = Domain.Enum.StatusCode.OK
+                                };
+                            }
+                        }
+                    }
+
+                    return new BaseResponse<UserEntity>
+                    {
+                        StatusCode = Domain.Enum.StatusCode.NotFound,
+                        Description = "Користувача не знайдено!",
+                        Data = null
+                    };
+                }
+                catch (Exception ex)
+                {
+                    return new BaseResponse<UserEntity>
+                    {
+                        StatusCode = Domain.Enum.StatusCode.InternalServerError,
+                        Description = ex.Message
+                    };
+                }
+            }
+        }
+
+        public Task<BaseResponse<UserEntity>> Update(UserEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BaseResponse<User>> Update(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task InsertUserTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
+        private async Task InsertUserTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, UserEntity entity)
         {
             var insertUserTable = new NpgsqlCommand(
                                 "INSERT INTO " +
@@ -213,7 +251,7 @@ namespace MovieOpinions.server.DAL.Repositories
             await insertUserTable.ExecuteNonQueryAsync();
         }
 
-        private async Task InsertUserProfileTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
+        private async Task InsertUserProfileTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, UserEntity entity)
         {
             var insertUserProfileTable = new NpgsqlCommand(
                                 "INSERT INTO " +
@@ -231,7 +269,7 @@ namespace MovieOpinions.server.DAL.Repositories
             await insertUserProfileTable.ExecuteNonQueryAsync();
         }
 
-        private async Task InsertUserSecurityTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, User entity)
+        private async Task InsertUserSecurityTableAsync(NpgsqlConnection conn, NpgsqlTransaction transaction, UserEntity entity)
         {
             var insertUserSecurityTable = new NpgsqlCommand(
                                 "INSERT INTO " +
@@ -249,6 +287,40 @@ namespace MovieOpinions.server.DAL.Repositories
             insertUserSecurityTable.Parameters.Add("@LastLogin", NpgsqlTypes.NpgsqlDbType.Timestamp).Value = (object?)entity.Security.LastLoginDate ?? DBNull.Value;
 
             await insertUserSecurityTable.ExecuteNonQueryAsync();
+        }
+
+        private UserEntity MapReaderToUser(NpgsqlDataReader reader)
+        {
+            return new UserEntity
+            {
+                UserId = Guid.Parse(reader["id_user"].ToString()),
+                LoginUser = reader["login_user"].ToString(),
+                EmailUser = reader["email_user"].ToString(),
+                Role = (Role)Convert.ToInt32(reader["role_user"]),
+                Profile = new UserProfile
+                {
+                    FirstName = reader["firstname_user"].ToString(),
+                    LastName = reader["lastname_user"].ToString(),
+                    Bio = reader["bio_user"].ToString(),
+                    AvatarUrl = reader["avatar_user"].ToString(),
+                    CreatedAt = Convert.ToDateTime(reader["created_at"]),
+                    UpdatedAt = reader["update_at"] == DBNull.Value
+                ? DateTime.MinValue
+                : Convert.ToDateTime(reader["update_at"].ToString())
+                },
+                Security = new UserSecurity
+                {
+                    PasswordHash = reader["password_hash_user"].ToString(),
+                    PasswordSalt = reader["password_salt_user"].ToString(),
+                    FailedLoginAttempts = Convert.ToInt32(reader["failed_login_attempts"].ToString()),
+                    IsBlocked = Convert.ToBoolean(reader["is_blocked"]),
+                    IsDeleted = Convert.ToBoolean(reader["is_deleted"]),
+                    IsEmailConfirmed = Convert.ToBoolean(reader["email_confirmed"]),
+                    LastLoginDate = reader["last_login"] == DBNull.Value
+                ? DateTime.MinValue
+                : Convert.ToDateTime(reader["last_login"].ToString())
+                }
+            };
         }
     }
 }

@@ -27,6 +27,9 @@ public class Program
         builder.Services.AddScoped<IActorRepository, ActorRepository>();
         builder.Services.AddScoped<ICountryService, CountryService>();
         builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+        builder.Services.AddScoped<ICommentService, CommentService>();
+        builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

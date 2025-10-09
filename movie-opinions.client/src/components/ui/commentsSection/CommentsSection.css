@@ -1,0 +1,92 @@
+@import '../../../style/Variables.css';
+
+a {
+    color: #fbb264; 
+}
+
+.comment {
+    background: var(--background-color);
+    padding: 20px 30px;
+    border: var(--background-color) solid 1px;
+    box-shadow: var(--shadow-default);
+    border-radius: 15px;
+    min-width: 400px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comment__row {
+    display: flex;
+    gap: 20px;
+}
+
+.comment__left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 10px
+}
+
+.comment__left span {
+    color: #fbb264;
+    font-family: var(--font-family-regular);
+}
+
+.comment__center {
+    flex: 7;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment__text {
+    color: var(--text-color);
+    font-family: var(--font-family-regular);
+    flex: 1 1 auto;
+}
+
+.comment__text-footer-nav ul {
+    display: flex;
+    gap: 10px; /* відстань між кнопками */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-family-italic);
+    color:  var(--text-color);
+    line-height: 1.6;
+}
+
+.comment__right {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+time {
+    align-items: flex-start; 
+    color: #FFF2E5;
+    opacity: 0.2;
+    flex: 1 1 auto;
+}
+
+.comment__right-footer-nav ul {
+    margin: 0;
+    display: flex;
+    gap: 8px;
+}
+
+.comment__avatar {
+    border-radius: 50%;
+    height: 100px;
+}
+
+.count__answer {
+    text-align: center;
+    color: #fbb264;
+    font-family: var(--font-family-regular);
+    cursor: pointer;
+}

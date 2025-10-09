@@ -9,6 +9,7 @@ namespace MovieOpinions.server.Domain.Model
     public class Genre
     {
         public int IdGenre { get; set; }
+
         public string NameGenre { get; set; }
     }
 }

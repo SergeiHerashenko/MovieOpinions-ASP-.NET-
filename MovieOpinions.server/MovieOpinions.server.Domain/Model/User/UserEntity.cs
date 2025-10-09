@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MovieOpinions.server.Domain.Model.User
 {
-    public class User
+    public class UserEntity
     {
         public Guid UserId { get; set; }
 

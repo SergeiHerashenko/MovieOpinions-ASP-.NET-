@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace MovieOpinions.server.DAL.Interface
 {
-    public interface IUserRepository : IBaseRepository<User>
+    public interface IUserRepository : IBaseRepository<UserEntity>
     {
-        Task<BaseResponse<User>> GetUser(string loginUser);
-        Task<BaseResponse<User>> GetUserId(int id);
-        Task<BaseResponse<bool>> BlockUser(User user);
+        Task<BaseResponse<UserEntity>> GetUser(string loginUser);
+
+        Task<BaseResponse<UserEntity>> GetUserId(Guid idUser);
+
+        Task<BaseResponse<bool>> BlockUser(UserEntity user);
     }
 }

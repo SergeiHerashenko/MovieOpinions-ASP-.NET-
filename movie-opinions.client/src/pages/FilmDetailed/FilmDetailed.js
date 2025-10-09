@@ -4,19 +4,35 @@ import { useEffect, useState } from 'react';
 import './FilmDetailed.css'
 
 import FormDetailedFilm from '../../components/ui/formDetailedFilm/FormDetailedFilm.js';
+import CommentsSection from '../../components/ui/commentsSection/CommentsSection.js';
 
 const FilmDetailed = () => {
     const { idFilm } = useParams();
     const [film, setFilm] = useState(null);
+    const [comment, setComments] = useState(null);
 
     useEffect(() => {
         const fetchFilm = async () => {
             try {
-                const response = await fetch(`https://localhost:7230/api/Film/${idFilm}`);
-                const data = await response.json();
-                setFilm(data.film);
+                const [filmResponse, commentsResponse] = await Promise.all([
+                    fetch(`https://localhost:7230/api/Film/${idFilm}`),
+                    fetch(`https://localhost:7230/api/Comment/${idFilm}`)
+                ]);
+
+                const filmData = await filmResponse.json();
+                const commentsData = await commentsResponse.json();
+
+                setFilm(filmData.film);
+                setComments(commentsData.comments);
+
+                document.title = filmData.film.nameFilm;
+
+                console.log(commentsData.data)
+                //const response = await fetch(`https://localhost:7230/api/Film/${idFilm}`);
+                //const data = await response.json();
+                //setFilm(data.film);
                 
-                document.title = data.film.nameFilm;
+                //document.title = data.film.nameFilm;
             } catch (error) {
                 console.error('Помилка завантаження фільму:', error);
             }
@@ -34,7 +50,10 @@ const FilmDetailed = () => {
     }
 
     return (
-        <FormDetailedFilm film = {film} ></FormDetailedFilm>
+        <section>
+            <FormDetailedFilm film = {film} ></FormDetailedFilm>
+            <CommentsSection ></CommentsSection>
+        </section>
     );
 };
 
