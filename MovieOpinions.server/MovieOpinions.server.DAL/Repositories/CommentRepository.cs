@@ -1,6 +1,7 @@
 ﻿using MovieOpinions.server.DAL.Connect_Database;
 using MovieOpinions.server.DAL.Interface;
 using MovieOpinions.server.Domain.Model.Comments;
+using MovieOpinions.server.Domain.Model.User;
 using MovieOpinions.server.Domain.Response;
 using Npgsql;
 using System;
@@ -68,7 +69,8 @@ namespace MovieOpinions.server.DAL.Repositories
                                             : Convert.ToDateTime(reader["create_at"].ToString()),
                                     ParentCommentId = reader["parent_comment_id"] == DBNull.Value
                                             ? (int?)null
-                                            : Convert.ToInt32(reader["parent_comment_id"])
+                                            : Convert.ToInt32(reader["parent_comment_id"]),
+                                    User = new UserProfile()
                                 };
 
                                 commentByFilm.Add(comment);

@@ -9,7 +9,7 @@ import CommentsSection from '../../components/ui/commentsSection/CommentsSection
 const FilmDetailed = () => {
     const { idFilm } = useParams();
     const [film, setFilm] = useState(null);
-    const [comment, setComments] = useState(null);
+    const [comment, setComments] = useState([]);
 
     useEffect(() => {
         const fetchFilm = async () => {
@@ -23,16 +23,9 @@ const FilmDetailed = () => {
                 const commentsData = await commentsResponse.json();
 
                 setFilm(filmData.film);
-                setComments(commentsData.comments);
+                setComments(Array.isArray(commentsData?.data) ? commentsData.data : []);
 
                 document.title = filmData.film.nameFilm;
-
-                console.log(commentsData.data)
-                //const response = await fetch(`https://localhost:7230/api/Film/${idFilm}`);
-                //const data = await response.json();
-                //setFilm(data.film);
-                
-                //document.title = data.film.nameFilm;
             } catch (error) {
                 console.error('Помилка завантаження фільму:', error);
             }
@@ -52,7 +45,12 @@ const FilmDetailed = () => {
     return (
         <section>
             <FormDetailedFilm film = {film} ></FormDetailedFilm>
-            <CommentsSection ></CommentsSection>
+            {comment.map((comment) => (
+                <CommentsSection 
+                    idComment={comment.idComment}
+                    key={comment.idComment} 
+                    comment={comment}></CommentsSection>
+            ))};
         </section>
     );
 };

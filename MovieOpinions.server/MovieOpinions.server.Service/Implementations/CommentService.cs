@@ -49,12 +49,28 @@ namespace MovieOpinions.server.Service.Implementations
                         };
                     }
 
-                    //comment.User.FirstName = getUserProfile.Data.FirstName;
-                    //comment.User.LastName = getUserProfile.Data.LastName;
-                    //comment.User.AvatarUrl = getUserProfile.Data.AvatarUrl;
-                    //comment.User.Bio = getUserProfile.Data.Bio;
-                    //comment.User.CreatedAt = getUserProfile.Data.CreatedAt;
-                    //comment.User.UpdatedAt = getUserProfile.Data.UpdatedAt;
+                    if(string.IsNullOrEmpty(getUserProfile.Data.FirstName))
+                    {
+                        comment.User.FirstName = "User" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                    }
+                    else
+                    {
+                        comment.User.FirstName = getUserProfile.Data.FirstName;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(getUserProfile.Data.LastName))
+                    {
+                        comment.User.LastName = "Anonymous";
+                    }
+                    else
+                    {
+                        comment.User.LastName = getUserProfile.Data.LastName;
+                    }
+
+                    comment.User.AvatarUrl = getUserProfile.Data.AvatarUrl ?? "/Images/Default/default-avatar.png";
+                    comment.User.Bio = getUserProfile.Data.Bio ?? "No bio provided.";
+                    comment.User.CreatedAt = getUserProfile.Data.CreatedAt;
+                    comment.User.UpdatedAt = getUserProfile.Data.UpdatedAt;
                 }
 
                 Dictionary<int, Comment> allComments = new Dictionary<int, Comment>();
