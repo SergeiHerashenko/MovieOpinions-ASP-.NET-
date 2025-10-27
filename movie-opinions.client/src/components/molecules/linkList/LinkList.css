@@ -1,0 +1,88 @@
+@import '../../../style/Variables.css';
+
+.menu {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    display: flex;
+    padding: 0;
+    gap: 0 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+    font-family: var(--font-family-italic);
+    font-size: 15px;
+}
+
+.menu-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.menu-mobile {
+    color: #FF8304; 
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.mobile-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: block;
+    width: 200px;
+    border-radius: 20px;
+    background: var(--background-color);
+    padding: 10px 20px;
+    box-shadow: var(--shadow-default);
+    z-index: 2;
+}
+
+.mobile-dropdown ul a {
+    text-decoration: none;
+    color: var(--text-color);
+    border-radius: 10px;
+    transition: 0.3s;
+    font-family: var(--font-family-italic);
+    font-size: 15px;
+    width: 200px;
+    padding: 10px 20px;
+}
+
+.mobile-dropdown li {
+    list-style: none;
+    padding: 20px 0px;
+}
+
+ul {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+@media (hover: hover) {
+    .menu a:hover {
+        box-shadow: var(--shadow-hover);
+    }
+
+    .mobile-dropdown ul a:hover {
+        box-shadow: var(--shadow-hover);
+    }
+}
+
+@media (hover: none) {
+    .menu a:active {
+        box-shadow: var(--shadow-hover);
+    }
+
+    .mobile-dropdown ul a:active {
+        box-shadow: var(--shadow-hover);
+    }
+}

@@ -1,0 +1,7 @@
+@import '../../../style/Variables.css';
+
+.logo {
+    font-family: var(--font-family-akronim); 
+    color: var(--accent-color); 
+    font-size: clamp(23px, 2vw, 30px);
+}

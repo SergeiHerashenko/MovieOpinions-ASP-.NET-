@@ -30,8 +30,11 @@ public class Program
         builder.Services.AddScoped<ICommentService, CommentService>();
         builder.Services.AddScoped<ICommentRepository, CommentRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IMediaService, MediaService>();
 
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddHttpContextAccessor();
+
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddAuthentication(option =>

@@ -1,17 +1,11 @@
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import './HomePage.css';
 
-import imageOne from '../../assets/Image/HomePage/Image_One.png';
-import imageTwo from '../../assets/Image/HomePage/Image_Two.png';
-import imageThree from '../../assets/Image/HomePage/Image_Three.png';
-import imageFour from '../../assets/Image/HomePage/Image_Four.png';
-
-import { useLayoutEffect, useRef, useState, useEffect } from 'react';
-
-const images = [
-    {id: 1, src: imageOne, alt: "Movie1", className: "img--rotate-left"},
-    {id: 2, src: imageTwo, alt: "Movie2", className: ""},
-    {id: 3, src: imageThree, alt: "Movie3", className: "img--rotate-right"},
-    {id: 4, src: imageFour, alt: "Movie4", className: "img--flip"},
+const imageClasses = [
+    "img--rotate-left",
+    "",                 
+    "img--rotate-right",
+    "img--flip"  
 ];
 
 const HomePage = () => {
@@ -19,18 +13,28 @@ const HomePage = () => {
     const measurementRef = useRef(null);
     const itemRef = useRef([]);
 
+    const [images, setImages] = useState([]);
+    const [visibleImage, setVisibleImage] = useState(0);
+
+    // Оновлення заголовка сторінки
     useEffect(() => {
         document.title = "Movie Opinions - Головна";
     });
 
-    const [visibleImage, setVisibleImage] = useState(images.length);
+    // Завантаження зображень з API
+    useEffect(() => {
+        fetch("https://localhost:7230/api/home/image")
+            .then(res => res.json())
+            .then(data => setImages(data.data || []));
+    }, []);
 
+    // Визначення кількості видимих зображень
     useLayoutEffect(() => {
         const updateVisibleImage = () => {
             if (!containerRef.current || !measurementRef.current) return;
 
             if (window.innerWidth < 230) {
-                setVisibleImage(0); // При дуже вузькому екрані — нічого не показуємо
+                setVisibleImage(0);
                 return;
             }
 
@@ -60,16 +64,15 @@ const HomePage = () => {
 
         const resizeObserver = new ResizeObserver(updateVisibleImage);
         resizeObserver.observe(containerRef.current);
-
         window.addEventListener('resize', updateVisibleImage);
 
         return () => {
             resizeObserver.disconnect();
             window.removeEventListener('resize', updateVisibleImage);
         };
-    }, []);
+    }, [images]);
 
-    return (
+    return(
         <>
             {/* Прихований контейнер для вимірювання */}
             <div ref={measurementRef} style={{position: 'absolute', visibility: 'hidden', height: 0, overflow: 'hidden', whiteSpace: 'nowrap'}}>
@@ -78,25 +81,25 @@ const HomePage = () => {
                         key={image.id}
                         src={image.src}
                         alt={image.alt}
-                        className={`main__images__img ${image.className}`}
+                        className={`home-main__img`}
                         ref={el => (itemRef.current[i] = el)}
                     />
                 ))}
             </div>
 
             {/* Видимий контейнер для рендеру */}
-            <main className="main" ref={containerRef}>
-                <div className="main__images">
-                    {images.slice(0, visibleImage).map(image => (
+            <main className="home-main" ref={containerRef}>
+                <div className="home-main__images">
+                    {images.slice(0, visibleImage).map((image, i) => (
                         <img
                             key={image.id}
                             src={image.src}
                             alt={image.alt}
-                            className={`main__images__img ${image.className}`}
+                            className={`home-main__img ${imageClasses[i]}`}
                         />
                     ))}
                 </div>
-                <div className="main__text">
+                <div className="home-main__text">
                     <h2>Відкрий світ кіно з нами!</h2>
                     <p>Огляди, рейтинги, обговорення — усе в одному місці 🎬</p>
                 </div>

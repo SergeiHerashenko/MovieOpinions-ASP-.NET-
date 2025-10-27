@@ -1,9 +1,0 @@
-@import '../../style/Variables.css';
-
-.Error {
-    width: 100%;
-    display: flex;
-    justify-content: center; 
-    align-items: center;     
-    color: var(--text-color);
-}

@@ -1,65 +1,36 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useEffect } from "react";
 
+import MainLayout from '../layout/MainLayout.js';
 import HomePage from '../pages/HomePage/HomePage.js';
 import LoginPage from '../pages/LoginPage/LoginPage.js';
-import RegistrationPage from '../pages/RegistrationPage/RegistrationPage.js';
-import FilmPage from '../pages/FilmPage/FilmPage.js';
-import MainLayout from '../layout/MainLayout.js';
-import FilmDetailed from '../pages/FilmDetailed/FilmDetailed.js';
 
 import './App.css';
 
 function App() {
-    
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
-
-    const handleLogin = (userData) => {
-        localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData);
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('user');
-        setUser(null);
-
-        fetch('https://localhost:7230/api/account/logout', {
-            method: 'POST',
-            credentials: 'include'
-        });
-    };
+    useEffect(() => {
+        fetch("https://localhost:7230/api/media/background/HomePage")
+            .then(res => res.json())
+            .then(response => {
+                if (response.statusCode === 200) {
+                    document.documentElement.style.setProperty(
+                    '--background-image',
+                    `url(${response.data.src})`
+                    );
+                }
+            })
+            .catch(err => console.error(err));
+    }, []);
 
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={
-                    <MainLayout user={user} onLogout={handleLogout} >
+                <Route path='/' element={
+                    <MainLayout >
                         <HomePage />
                     </MainLayout>
-                } />
-                <Route path='/login' element={
-                    <MainLayout user={user} onLogout={handleLogout} >
-                        <LoginPage onLogin={handleLogin} />
-                    </MainLayout>
-                } />
-                <Route path='/register' element={
-                    <MainLayout user={user} onLogout={handleLogout} >
-                        <RegistrationPage onLogin={handleLogin} />
-                    </MainLayout>
-                } />
-                <Route path='/films' element={
-                    <MainLayout user={user} onLogout={handleLogout} >
-                        <FilmPage onLogin={handleLogin} />
-                    </MainLayout>
-                } />
-                <Route path='/films/:idFilm' element={
-                    <MainLayout user={user} onLogout={handleLogout} >
-                        <FilmDetailed onLogin={handleLogin} />
-                    </MainLayout>
-                } />
+                }>
+                </Route>
             </Routes>
         </BrowserRouter>
     );

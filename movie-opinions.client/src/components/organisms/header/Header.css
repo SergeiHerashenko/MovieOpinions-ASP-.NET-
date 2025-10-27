@@ -1,0 +1,110 @@
+@import '../../../style/Variables.css';
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: var(--background-color) solid 1px;
+    background: var(--background-color);
+    padding: 20px 40px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-default);
+    max-width: 1900px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 20px auto;
+    position: sticky;
+    top: 20px;
+    z-index: 3;
+}
+
+.header__wrapper-mobile {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.header__wrapper-mobile .header__logo-wrapper {
+    order: 1;
+    flex: 6;
+    display: flex;
+    justify-content: center;
+}
+
+.header__wrapper-mobile .header__nav-wrapper {
+    order: 2;
+    flex: 1;
+}
+
+.header__wrapper-mobile .header__nav-wrapper .menu-container {
+    justify-content: start;
+}
+
+.header__wrapper{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.header__logo-wrapper {
+    flex: 1;
+}
+
+.header__nav-wrapper {
+    flex: 4;
+    display: flex;
+    justify-content: center;
+}
+
+.header__buttons-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.button--login,
+.button--logout {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.button--register {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.header__button-mobile {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__button-mobile-img{
+    width: 20px;
+    height: 20px;
+}
+
+.mobile-buttons-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translateX(-100%);
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 200px;
+    border-radius: 20px;
+    background: var(--background-color);
+    padding: 30px 20px;
+    box-shadow: var(--shadow-default);
+    z-index: 2;
+}

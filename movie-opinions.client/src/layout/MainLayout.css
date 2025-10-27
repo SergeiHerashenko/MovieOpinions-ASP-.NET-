@@ -1,0 +1,11 @@
+@import '../style/Variables.css';
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.layout__content {
+    flex: 1;
+}
